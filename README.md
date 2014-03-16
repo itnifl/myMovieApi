@@ -26,16 +26,18 @@ This code works as is, but it is not fully ready yet. The following is missing:
 	4. Installation instructions for a mongodb ready system.
 	5. Several routes and different templates can be used and added. This functionality does not exist yet.
 	6. As of today, only three routes exist via get('/moviesAsHTML','/moviesAsList','/getImage/:image').
+	7. The html response includes bootstrap css and javascript. That might not be right for your site.
 
 
 Prerequisites
 -------------
 My Movie API installation and operation requires that the following software is installed:
 
->node.js
->npm
->perl (only v5.14.2 tested)
->mongodb if you want this system to cache results from api(recommended).
+	1. node.js
+	2. npm
+	3. perl (only v5.14.2 tested)
+	4. mongodb if you want this system to cache results from api(recommended).
+	5. jQuery needs to be included in the site which you insert the html response
 
 Installing Prerequisites
 ------------------------
