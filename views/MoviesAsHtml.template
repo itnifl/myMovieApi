@@ -1,0 +1,50 @@
+<!--You have to include your own jQuery:
+	<script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+		-->
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<style type="text/css">
+	.bold_Header {		
+		font-size: xx-large;
+		text-align: center;		
+  		vertical-align: middle;
+  		color: #2a6496;
+	}	
+	.carousel-inner > .item > a > img {
+	    margin: 0 auto;
+	}
+	.carousel-holder_class {
+		margin: 0 auto auto auto; 
+		width: 277px; 
+		height: 290px;
+		border-width: 2px;
+	  	border-style: solid;
+	  	border-color: #999999;
+	}
+</style>
+<div id="carousel-holder" class="carousel-holder_class">
+	<div id="movieapi-carousel" class="carousel slide" data-ride="carousel" style="width:275px;" style="margin: 0 auto auto auto;">
+		<ol class="carousel-indicators">
+			{{#each objects}}
+				<li data-target="#movieapi-carousel" data-slide-to="{{@index}}" {{#unless @index}}class="active"{{/unless}}></li>
+			{{/each}}
+		</ol>
+		<div class="carousel-inner">
+			{{#each objects}}            
+				<div class="item {{#unless @index}}active{{/unless}}">
+				 	<div class="bold_Header">{{Title}}</div>
+				 	<a href="http://www.imdb.com/title/{{imdbID}}" target="_blank"><img src="{{Poster}}" style="width:150px; height:222px;"/></a><br/>
+				 	<div class="carousel-caption">
+		 
+		      		</div>
+				</div>
+			{{/each}}
+		</div>
+		<a class="left carousel-control" href="#movieapi-carousel" data-slide="prev">
+			<span class="glyphicon glyphicon-chevron-left"></span>
+		</a>
+		<a class="right carousel-control" href="#movieapi-carousel" data-slide="next">
+			<span class="glyphicon glyphicon-chevron-right"></span>
+		</a>
+	</div>
+</div>

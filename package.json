@@ -1,0 +1,23 @@
+{
+    "name": "MyMovieAPI",
+    "main": "./server.js",
+    "description": "My Favourite Movie API",
+    "version": "0.0.0",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository":"",
+    "author":"Atle Holm",
+    "private": true,
+    "dependencies": {
+        "express": "3.x",
+        "handlebars": "latest",
+        "socket.io": "latest",
+        "underscore": "latest",
+        "request": "latest",
+        "async": "latest",
+        "nodeunit": "latest",
+        "mongodb": "latest"
+    }
+}
+
