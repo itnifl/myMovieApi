@@ -1,6 +1,6 @@
 module.exports = {
     api: "www.omdbapi.com",
-    serverHostname: "nodenet.homelinux.net",
+    serverHostname: "server.homelinux.net",
     serverPort: 3000,
     sourceDir: "movieDir",
     debug: true,
