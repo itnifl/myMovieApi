@@ -24,7 +24,7 @@ MoviesAsList.prototype.getAsList = function(dir, responseHandler) {
 	var request = require("request");
 	var async = require("async");
 	BaseModel.getList(dir, function(movieList) {
-		if(config.debug) util.log("Received from base: " + movieList);
+		if(config.debug) util.log("Received from base: '" + movieList + "' at MoviesAsList.getAsList()");
 
 		var jsonText = '';
 		if(movieList === undefined) {

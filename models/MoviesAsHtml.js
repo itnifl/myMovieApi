@@ -23,10 +23,10 @@ _.extend(MoviesAsHtml, BaseModel);
  * @param {String} dir Directory to list movies as html from
  * @param {Object} responseHandler callback to handle response from this function
  */
-MoviesAsHtml.prototype.getAsHTML = function(dir, responseHandler) {  
+MoviesAsHtml.prototype.getAsHTML = function(dir, includedependencies, responseHandler) {  
   var htmlReturn = "";
   BaseModel.getList(dir, function(movieList) {
-		if(config.debug) util.log("Received from base: " + movieList);
+		if(config.debug) util.log("Received from base: '" + movieList + "' at MoviesAsHtml.getAsHTML()");
 
 		var jsonText = '';
 		if(movieList === undefined) {
@@ -50,8 +50,9 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, responseHandler) {
 		  		jsonText +=  ']';
 		  		var handlebarsData = JSON.parse(jsonText);
 		  		try {
-			  		var source = fs.readFileSync('./views/MoviesAsHtml.template').toString();
+			  		var source = includedependencies ? fs.readFileSync('./views/MoviesAsHtmlWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtml.template').toString();			  		
 				    var template = Handlebars.compile(source);
+
 				    if(!handlebarsData[0].Response) handlebarsData = [{"Title": "Not found", "Year": "0000", "Poster": "undefined"}];
 				    for (var i = 0; i < handlebarsData.length; i++) {
 					    if(handlebarsData[i].Poster != undefined) {
@@ -65,7 +66,7 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, responseHandler) {
 					    }
 					}
 				    var wrapper = {objects: handlebarsData};
-				    var htmlReturn = template(wrapper);				    
+				    var htmlReturn = template(wrapper);	    
 					responseHandler(htmlReturn);
 		  		} catch (err) {
 		  			if(config.debug) util.log('Failed to load MoviesAsHtml.template, ' + err);

@@ -10,7 +10,8 @@ var config = require('../config');
  */
 function MoviesAsHtmlController() {
   this.routes = [
-	['get', '/moviesAsHTML', this.get]
+	['get', '/moviesAsHTML', this.get],
+	['get', '/moviesAsHTML/:includedependencies', this.get]
   ];
 }
 util.inherits(MoviesAsHtmlController, BaseController);
@@ -23,7 +24,11 @@ util.inherits(MoviesAsHtmlController, BaseController);
  */
 MoviesAsHtmlController.prototype.get = function(req, res) {
   var MoviesAsHTML = Model.get('MoviesAsHtml').find(1);
-  MoviesAsHTML.getAsHTML(config.sourceDir, function(result) {
+  var includedependencies = req.params.includedependencies;
+  if(typeof includedependencies === 'undefined') includedependencies = false;
+  else includedependencies = true;
+
+  MoviesAsHTML.getAsHTML(config.sourceDir, includedependencies, function(result) {
   		res.send(result);
   });
   util.log("Sending movies as HTML by request..");

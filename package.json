@@ -17,7 +17,8 @@
         "request": "latest",
         "async": "latest",
         "nodeunit": "latest",
-        "mongodb": "latest"
+        "mongodb": "latest",
+        "colors": "latest"
     }
 }
 

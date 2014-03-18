@@ -17,15 +17,15 @@ BaseModel.getList = function(dir, callbackHandler) {
 	
 	async.each(folders, 
 		function(folder, callback){
-			if(config.debug) util.log("Executing: perl scripts/nameProcessor.pl '" + folder + "'");
+			if(config.debug) util.log("Executing: perl scripts/nameProcessor.pl '" + folder + "' at BaseModel.getList()");
 			exec("perl scripts/nameProcessor.pl '" + folder + "'", function(err, stdout, stderr) {	
-				if(config.debug) util.log("Pushing result: '" + stdout + "' after reading '" + folder + "'");			
+				if(config.debug) util.log("Pushing result: '" + stdout + "' after reading '" + folder + "' at BaseModel.getList()");			
 				movieNames.push(stdout);
 				callback();
 			});			
 	  	},
 	  	function(err){
-	  		if(config.debug) util.log("Returning: " + movieNames);
+	  		if(config.debug) util.log("Returning: '" + movieNames + "' at at BaseModel.getList()");
 	  		callbackHandler(movieNames);		
 	  	}
 	);	
