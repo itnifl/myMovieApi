@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Movie API</title>
+    <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>		
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <style type="text/css">
+		.spanRowShapeColored { background:#F4F4FF; border-color:#f7f7f7; border-radius:10px; border:1px solid;}
+		.spanRowShapeColored:hover{ background:#ECECEC; border-color:#f7f7f7; border-radius:10px; border:1px solid;}
+		.spanRowShapeWhite { background:white; border-color:#f7f7f7; border-radius:10px; border:1px solid; }
+		.spanRowShapeEmpty { background:white; border-color:#f7f7f7; border-radius:10px; border:0px solid; }
+		.table {margin-bottom: 0px;}
+	</style>
+</head>
+
+<body>
+    <div class="container-fluid">
+		<div class="bs-docs-grid">
+            <div class="row-fluid" style="margin-bottom:20px;">
+                <div class="span12 spanRowShapeWhite" style="margin:0px;">
+                    <div style="text-align:center;margin:0px;"><span style="font-size:xx-large;padding:0px;"><b>My Movie API</b></span>&nbsp;&nbsp;<span style="font-size:large;padding:0px;">[list of all usable routes]</span></div>
+                </div>
+            </div>
+
+		{{#each objects}}
+			
+				<div class="row-fluid" style="margin-bottom:5px;">
+				    <div class="span5 spanRowShapeColored">
+				        <span>
+				            <table class="table"><tr><td style="width:150px;"><b>Verb:</b> {{verb}}</td><td style="width:365px;"><b>Route:</b> {{route}}</td><td><b>Description:</b> {{description}}</td></tr></table>
+				        </span>
+				    </div>
+				</div>
+			
+		{{/each}}
+        </div>
+	</div>
+</body>
+</html>

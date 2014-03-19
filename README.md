@@ -20,9 +20,8 @@ This API uses omdbapi.com to fetch information about movies, thank you omdbapi.c
 
 ### NB!! This code works as is, but it is not fully ready yet. The following is missing:
 	1. Code for caching in mongodb. This functionality does not exist yet.
-	2. Code to display all api routes and usages when entering root /. This functionality does not exist yet.
-	3. Installation instructions for a mongodb ready system.
-	4. Several routes and different templates can be used and added. These functionalities do not exist yet.
+	2. Installation instructions for a mongodb ready system.
+	3. Several routes and different templates can be used and added. These functionalities do not exist yet.
 
 
 Prerequisites
@@ -33,7 +32,7 @@ My Movie API installation and operation requires that the following software is 
 	2. npm
 	3. perl (only v5.14.2 tested)
 	4. mongodb if you want this system to cache results from api(recommended).
-	5. jQuery needs to be included in the site which you insert the html response
+	5. jQuery and Bootstrap may need to be included in the site which you insert the html response
 
 Installing Prerequisites
 ------------------------
@@ -49,6 +48,8 @@ http://docs.mongodb.org/manual/tutorial/install-mongodb-on-red-hat-centos-or-fed
 Introduction to jQuery:
 http://learn.jquery.com/about-jquery/how-jquery-works/
 
+On Bootstrap:
+http://getbootstrap.com/getting-started/
 
 Installing
 ----------
@@ -110,10 +111,11 @@ $.get( "http://yourApiHostnameHere:3000/moviesAsHTML", function(data) {
 });
 ```
 ###Following routes exist:
-	1. '/moviesAsHTML' - returns all movies in folder specified in sourceDir in config.js as a Bootstrap Carousel, but does not include dependecies(jQuer and Bootstrap).
-	2. '/moviesAsHTML/true' - returns all movies in folder specified in sourceDir in config.js as a Bootstrap Carousel, and does include dependecies.
-	3. '/moviesAsList - returns jSON formattet information about all movies in folder specified in variable sourceDir in config.js as presented by omdbapi.com.
-	4. '/getImage/:image'  - returns a cached image and returns it to the client, given that you know the file name and give it as the argument :image.
+	1. '/' - lists all routes and theyr descriptions.
+	2. '/moviesAsHTML' - returns all movies in folder specified in sourceDir in config.js as a Bootstrap Carousel, but does not include dependecies(jQuer and Bootstrap).
+	3. '/moviesAsHTML/true' - returns all movies in folder specified in sourceDir in config.js as a Bootstrap Carousel, and does include dependecies.
+	4. '/moviesAsList - returns jSON formattet information about all movies in folder specified in variable sourceDir in config.js as presented by omdbapi.com.
+	5. '/getImage/:image'  - returns a cached image and returns it to the client, given that you know the file name and give it as the argument :image.
 
 Maintainers
 -----------

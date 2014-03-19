@@ -10,7 +10,7 @@ var config = require('../config');
  */
 function GetImageController() {
   this.routes = [
-	['get', '/getImage/:image', this.get]
+	['get', '/getImage/:image', this.get, 'Retrieves an image from coverCache to the client requesting it']
   ];
 }
 util.inherits(GetImageController, BaseController);
@@ -29,7 +29,7 @@ GetImageController.prototype.get = function(req, res) {
      	res.end(result);
   		//res.send(result);
   });  
-  util.log("Sending image by request " + req.client + "..");
+  util.log("Sending image by request ..");
 };
 
 module.exports = new GetImageController();

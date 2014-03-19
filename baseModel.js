@@ -22,7 +22,7 @@ BaseModel.getList = function(dir, callbackHandler) {
 				if(config.debug) util.log("Pushing result: '" + stdout + "' after reading '" + folder + "' at BaseModel.getList()");			
 				movieNames.push(stdout);
 				callback();
-			});			
+			});	
 	  	},
 	  	function(err){
 	  		if(config.debug) util.log("Returning: '" + movieNames + "' at at BaseModel.getList()");

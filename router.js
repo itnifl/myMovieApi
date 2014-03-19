@@ -30,7 +30,7 @@ function Router() {
 
     if (controller.hasOwnProperty('routes')) {
       controller.routes.forEach(function (item) {
-    	 self.addRoute(item[0], item[1], item[2]);
+    	   self.addRoute(item[0], item[1], item[2], item[3]);
       });
     }
   });

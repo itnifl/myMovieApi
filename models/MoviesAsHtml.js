@@ -69,7 +69,7 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, includedependencies, responseHa
 				    var htmlReturn = template(wrapper);	    
 					responseHandler(htmlReturn);
 		  		} catch (err) {
-		  			if(config.debug) util.log('Failed to load MoviesAsHtml.template, ' + err);
+		  			if(config.debug) util.log('Failed to load ' + (includedependencies ? 'MoviesAsHtmlWithDependencies.template' : '(MoviesAsHtml.template)') +', ' + err);
 		  			responseHandler(err);
 		  		}		    	
 		  	}

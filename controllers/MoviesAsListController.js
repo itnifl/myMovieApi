@@ -10,7 +10,7 @@ var config = require('../config');
  */
 function MoviesAsListController() {
   this.routes = [
-	['get', '/moviesAsList', this.get]
+	['get', '/moviesAsList', this.get, 'Displays all movies in sourceDir as jSON']
   ];
 }
 util.inherits(MoviesAsListController, BaseController);

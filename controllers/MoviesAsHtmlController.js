@@ -10,8 +10,8 @@ var config = require('../config');
  */
 function MoviesAsHtmlController() {
   this.routes = [
-	['get', '/moviesAsHTML', this.get],
-	['get', '/moviesAsHTML/:includedependencies', this.get]
+	['get', '/moviesAsHTML', this.get, 'Displays all movies in sourceDir as HTML carousel but does not includes jQuery and Bootstrap'],
+	['get', '/moviesAsHTML/:includedependencies', this.get, 'Displays all movies in sourceDir as HTML carousel and includes jQuery and Bootstrap.']
   ];
 }
 util.inherits(MoviesAsHtmlController, BaseController);
