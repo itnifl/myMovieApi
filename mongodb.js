@@ -25,13 +25,6 @@ MongoDB.prototype.close = function() {
 }
 
 /**
- * get connection status function.
- */
-MongoDB.prototype.getConnectionStatus = function() {
-	return this._db._state;
-}
-
-/**
  * open database connection function.
  * @param {Object} responseHandler ResponseHandler Callback
  * Initial database operations should be handeled in callback.
