@@ -3,7 +3,7 @@ My Movie API
 
 Initial Comments
 ----------------
-This API uses omdbapi.com to fetch information about movies, thank you omdbapi.com! The movie names that it uses to fetch information with are files and folder names in a given source directory set in configuration.
+This API uses omdbapi.com to fetch information about movies, thank you omdbapi.com! The movie names that it uses to fetch information with are files and folder names in a given source directory set in configuration. For example html look at carousel at http://www.team-holm.net
 
  This API will show favourite movies both as a list made in JSON and as html that can be used or embedded.
 ###  The commandments:
@@ -38,6 +38,10 @@ Install node.js and npm using the following command:
 
 Debian: `sudo apt-get install nodejs` RedHat: `sudo yum install npm`
 
+Install Perl using the following command:
+
+Debian: `sudo apt-get install perl` RedHat: `sudo yum install perl`
+
 Take a look at these guides for installing mongodb on the system where you run MyMovieAPI:
 - http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
 - http://docs.mongodb.org/manual/tutorial/install-mongodb-on-windows/
@@ -69,6 +73,8 @@ Update all dependencies using the following command:
 Start the application using the following command:
 
 `node server.js`
+
+Set up necessary variables by editing config.js.
 
 Upgrading
 ---------
