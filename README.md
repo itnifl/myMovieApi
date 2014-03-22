@@ -10,18 +10,16 @@ This API uses omdbapi.com to fetch information about movies, thank you omdbapi.c
 	1. All shall be nodeunit tested.
 	2. All shall be re-usable.
 	3. All shall be MVC structured.
-	4. All errors shall be handled gracefully.
+	4. All errors shall be handled gracefully(as good as a good try gets).
 	
-### The project shall take in use:
+### The project takes in use:
 	1. Nodejs as base system.
 	2. Various packages for nodejs listed in package.json.
 	3. Perl scripts for for pre-made functionality.
 	4. Mongodb for caching
 
-### NB!! This code works as is, but it is not fully ready yet. The following is missing:
-	1. Code for caching in mongodb. This functionality does not exist yet.
-	2. Installation instructions for a mongodb ready system.
-	3. Several routes and different templates can be used and added. These functionalities do not exist yet.
+### NB!! This code works as is, but the following is missing:
+	1. Several routes for different html templates can be used and added. These functionalities do not exist yet, but will be added wheneber I feel like it.
 
 
 Prerequisites
@@ -40,10 +38,13 @@ Install node.js and npm using the following command:
 
 Debian: `sudo apt-get install nodejs` RedHat: `sudo yum install npm`
 
-Take a look at these guides for installing mongodb:
-http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
-http://docs.mongodb.org/manual/tutorial/install-mongodb-on-windows/
-http://docs.mongodb.org/manual/tutorial/install-mongodb-on-red-hat-centos-or-fedora-linux/
+Take a look at these guides for installing mongodb on the system where you run MyMovieAPI:
+- http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
+- http://docs.mongodb.org/manual/tutorial/install-mongodb-on-windows/
+- http://docs.mongodb.org/manual/tutorial/install-mongodb-on-red-hat-centos-or-fedora-linux/
+
+When done, create the database movies as such from the Linux console.
+`mongo movies`
 
 Introduction to jQuery:
 http://learn.jquery.com/about-jquery/how-jquery-works/
@@ -116,6 +117,8 @@ $.get( "http://yourApiHostnameHere:3000/moviesAsHTML", function(data) {
 	3. '/moviesAsHTML/true' - returns all movies in folder specified in sourceDir in config.js as a Bootstrap Carousel, and does include dependecies.
 	4. '/moviesAsList - returns jSON formattet information about all movies in folder specified in variable sourceDir in config.js as presented by omdbapi.com.
 	5. '/getImage/:image'  - returns a cached image and returns it to the client, given that you know the file name and give it as the argument :image.
+
+All routes are found under http://yourhostname:port/ of the running MyMovieApi system.
 
 Maintainers
 -----------

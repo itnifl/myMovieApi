@@ -29,7 +29,7 @@ GetImageController.prototype.get = function(req, res) {
      	res.end(result);
   		//res.send(result);
   });  
-  util.log("Sending image by request ..");
+  //util.log("Sending image by request to client..");
 };
 
 module.exports = new GetImageController();

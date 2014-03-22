@@ -23,7 +23,7 @@ _.extend(GetImage, BaseModel);
 GetImage.prototype.getImage = function(imageFile, responseHandler) {
 	var fs = require("fs");
 	var img = fs.readFileSync('./coverCache/' + imageFile);
-	if(config.debug) util.log('Returning image to responseHandler..');
+	if(config.debug) util.log('Returning "' + imageFile + '" to responseHandler that will return it to client..');
 	responseHandler(img);
 };
 

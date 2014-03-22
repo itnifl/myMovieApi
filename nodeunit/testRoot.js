@@ -25,7 +25,7 @@ module.exports = {
     },
     testRoot: function(test) {   
         test.expect(2);           
-        console.log('**Running tests: '.yellow + '(1)');
+        console.log('**Running tests: '.yellow + '(2)');
         if(config.debug) console.log("**Got response with length: ".yellow + routeResponse.length);
         test.ok(routeResponse.length > 0, "Failed testing that we did not receive an empty result..");
         var testForHtmlResult = /<[a-z][\s\S]*>/i;
