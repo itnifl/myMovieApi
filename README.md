@@ -19,7 +19,7 @@ This API uses omdbapi.com to fetch information about movies, thank you omdbapi.c
 	4. Mongodb for caching
 
 ### NB!! This code works as is, but the following is missing:
-	1. Several routes for different html templates can be used and added. These functionalities do not exist yet, but will be added wheneber I feel like it.
+	1. Several routes for different html templates can be used and added. These functionalities do not exist yet, but will be added whenever I feel like it.
 
 
 Prerequisites
@@ -70,11 +70,12 @@ Update all dependencies using the following command:
 
 `npm install`
 
+Set up necessary variables by editing config.js.
+
 Start the application using the following command:
 
 `node server.js`
 
-Set up necessary variables by editing config.js.
 
 Upgrading
 ---------
