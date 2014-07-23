@@ -29,63 +29,65 @@ MoviesAsList.prototype.getAsList = function(dir, responseHandler) {
 		var mongodb = new MongoDB(config.mongoServer, config.mongoPort);
 		
 		var jsonText = '';
-		if(movieList === undefined) {
-			movieList = new Array();
-			movieList.push('No movie found');
-		}
-		if(movieList.length > 1) jsonText +=  '[';
+		if(movieList === undefined || movieList.length == 0) {
+            responseHandler('[{"error": "No movie found"}]');
+        } else {
+		    if(movieList.length > 1) jsonText +=  '[';
 
-		async.waterfall([
-			function(waterfall_callback) {
-				util.log("Attempting to connect to mongodb in MoviesAsHtml.getAsHTML..");
-				mongodb.open(function(connectionResponse) {
-					util.log(".. connected!");
-					waterfall_callback(null);
-				});	
-			}, 
-			function(waterfall_callback) {
-				async.each(movieList, 
-					function(movie, callback) {
-						if(config.debug) util.log('Attempting fetch movie "' + movie + '" from mongodb..');
-				        mongodb.getMovie(movie, function(cachedMovie) {
-				        	if(cachedMovie.Response == false)  {
-				            	if(config.debug) util.log('Attempting fetch movie "' + movie + '" from ' +config.api +'..');
-								request("http://" + config.api + "/?t=" +movie, function(error, response, body) {
-									var movieObj = JSON.parse(body);		
-									if(movieObj.Response) {
-										jsonText += body;
-										mongodb.saveMovie(movieObj, function(response) {
-				                			if(response.status != 'success' && config.debug) util.log('Received error while trying to save and cache movie: "' + response.status + '"');
-				                			else if(config.debug) util.log('Successfully saved movie to mongodb.. ');      			                    
-				                		}); 
-										if(jsonText != '') jsonText += ', ';
-									}						 	
-						 			callback();
-								});
-							} else {
-		                		var movieString = typeof cachedMovie == 'object' ? JSON.stringify(cachedMovie) : cachedMovie;
-		                		var movieObj = typeof cachedMovie == 'object' ? cachedMovie : JSON.parse(cachedMovie);
-		                		if(movieObj.Response) {
-		                			jsonText += movieString;	
-		                			if(jsonText != '') jsonText += ', ';
-		                		}
-		                		callback();
-	                		}
-	                	});
-				  	},
-				  	function(err) {
-				  		jsonText = jsonText.substring(0, jsonText.length - 2)
-				  		if(movieList.length > 1) jsonText +=  ']';
-				    	responseHandler(jsonText);
-				    	waterfall_callback(null);
-				  	}
-				);
-			}], function(err) {
-				if(err && config.debug) util.log("Received error after async waterfall in MoviesAsHtml.getAsHTML(): " + err);
-				if(err) return err;
-				mongodb.close();
-			}
-		);	
+		    async.waterfall([
+			    function(waterfall_callback) {
+				    util.log("Attempting to connect to mongodb in MoviesAsHtml.getAsHTML..");
+				    mongodb.open(function(connectionResponse) {
+					    util.log(".. connected!");
+					    waterfall_callback(null);
+				    });	
+			    }, 
+			    function(waterfall_callback) {
+				    async.each(movieList, 
+					    function(movie, callback) {
+						    if(config.debug) util.log('Attempting fetch movie "' + movie + '" from mongodb..');
+				            mongodb.getMovie(movie, function(cachedMovie) {
+				        	    if(cachedMovie.Response == false)  {
+				            	    if(config.debug) util.log('Attempting fetch movie "' + movie + '" from ' +config.api +'..');
+								    request("http://" + config.api + "/?t=" +movie, function(error, response, body) {
+									    var movieObj = JSON.parse(body);		
+									    if(movieObj.Response) {
+										    jsonText += body;
+                                            if(mongodb.db._state == 'connected') {
+										        mongodb.saveMovie(movieObj, function(response) {
+				                			        if(response.status != 'success' && config.debug) util.log('Received error while trying to save and cache movie: "' + response.status + '"');
+				                			        else if(config.debug) util.log('Successfully saved movie to mongodb.. ');      			                    
+				                		        }); 
+                                            }
+										    if(jsonText != '') jsonText += ', ';
+									    }						 	
+						 			    callback();
+								    });
+							    } else {
+		                		    var movieString = typeof cachedMovie == 'object' ? JSON.stringify(cachedMovie) : cachedMovie;
+		                		    var movieObj = typeof cachedMovie == 'object' ? cachedMovie : JSON.parse(cachedMovie);
+		                		    if(movieObj.Response) {
+		                			    jsonText += movieString;	
+		                			    if(jsonText != '') jsonText += ', ';
+		                		    }
+		                		    callback();
+	                		    }
+	                	    });
+				  	    },
+				  	    function(err) {
+				  		    jsonText = jsonText.substring(0, jsonText.length - 2)
+				  		    if(movieList.length > 1) jsonText +=  ']';
+				    	    responseHandler(jsonText);
+				    	    waterfall_callback(null);
+				  	    }
+				    );
+			    }], function(err) {
+				    if(err && config.debug) util.log("Received error after async waterfall in MoviesAsHtml.getAsHTML(): " + err);
+				    if(err) return err;
+				    mongodb.close();
+			    }
+		    );	
+        }
 	});
 };
 
