@@ -123,8 +123,9 @@ $.get( "http://yourApiHostnameHere:3000/moviesAsHTML", function(data) {
 	1. '/' - lists all routes and theyr descriptions.
 	2. '/moviesAsHTML' - returns all movies in folder specified in sourceDir in config.js as a Bootstrap Carousel, but does not include dependecies(jQuer and Bootstrap).
 	3. '/moviesAsHTML/true' - returns all movies in folder specified in sourceDir in config.js as a Bootstrap Carousel, and does include dependecies.
-	4. '/moviesAsList - returns jSON formattet information about all movies in folder specified in variable sourceDir in config.js as presented by omdbapi.com.
-	5. '/getImage/:image'  - returns a cached image and returns it to the client, given that you know the file name and give it as the argument :image.
+	4. '/moviesAsHTML/large/:includedependencies' - displays all movies in sourceDir as HTML carousel with jsShowOff and includes dependencies(jQuery and jsShowOff).
+	5. '/moviesAsList - returns jSON formattet information about all movies in folder specified in variable sourceDir in config.js as presented by omdbapi.com.
+	6. '/getImage/:image'  - returns a cached image and returns it to the client, given that you know the file name and give it as the argument :image.
 
 All routes are found under http://yourhostname:port/ of the running MyMovieApi system.
 
