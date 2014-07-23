@@ -30,7 +30,8 @@ My Movie API installation and operation requires that the following software is 
 	2. npm
 	3. perl (only v5.14.2 tested)
 	4. mongodb if you want this system to cache results from api(recommended).
-	5. jQuery and Bootstrap may need to be included in the site which you insert the html response
+	5. jQuery and Bootstrap may need to be included depending on the API route you choose.
+	6. jQuery and jShowOff may need to be included depending on the API route you choose.
 
 Installing Prerequisites
 ------------------------

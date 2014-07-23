@@ -31,13 +31,15 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, includedependencies, responseHa
 		var mongodb = new MongoDB(config.mongoServer, config.mongoPort);
 		var jsonText = '';
 
-		if(movieList === undefined) {
-			movieList = new Array();
-			movieList.push('No movie found');
-            responseHandler(undefined);
-		} else if(movieList.length == 0) {
+		if(movieList === undefined) movieList = new Array();
+        if(movieList.length == 0) {
             movieList.push('No movie found');
-            responseHandler(undefined);
+            var handlebarsData = [{"Title": "None Found", "Year": "0000", "Poster": "http://" + config.serverHostname + ":" + config.serverPort + "/getImage/notValid.jpg", "noExists": "No movie found"}];
+            var source = includedependencies ? fs.readFileSync('./views/MoviesAsHtmlWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtml.template').toString();
+            var template = Handlebars.compile(source);
+            var wrapper = {objects: handlebarsData};
+			var htmlReturn = template(wrapper);	    
+			responseHandler(htmlReturn);
         } else {
 		    jsonText +=  '[';
 			
@@ -105,7 +107,7 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, includedependencies, responseHa
 					  		        var source = includedependencies ? fs.readFileSync('./views/MoviesAsHtmlWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtml.template').toString();			  		
 						            var template = Handlebars.compile(source);
 
-						            if(!handlebarsData[0].Response) handlebarsData = [{"Title": "Not found", "Year": "0000", "Poster": "undefined"}];
+						            if(!handlebarsData[0].Response) handlebarsData = [{"Title": "None Found", "Year": "0000", "Poster": "http://" + config.serverHostname + ":" + config.serverPort + "/getImage/notValid.jpg", "noExists": "No movie found"}];
 						            for (var i = 0; i < handlebarsData.length; i++) {
 							            if(handlebarsData[i].Poster != undefined) {
 							    	        var filename = handlebarsData[i].Poster.split('/')[handlebarsData[i].Poster.split('/').length -1];

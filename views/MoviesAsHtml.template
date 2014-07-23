@@ -37,8 +37,32 @@
 				 	<div class="bold_Header">{{Title}}</div>
 				 	<a href="http://www.imdb.com/title/{{imdbID}}" target="_blank"><img src="{{Poster}}" style="width:150px; height:222px;"/></a><br/>
 				 	<div class="carousel-caption">
-		 
-		      		</div>
+            {{#if noExists}}
+            <style type="text/css">
+              .noExistsTextImage {
+              position: relative;
+              width: 100%; /* for IE 6 */
+              }
+              .noExistsText {
+              color: white;
+              font: bold 16px/35px Helvetica, Sans-Serif;
+              letter-spacing: -1px;
+              background: rgb(0, 0, 0); /* fallback color */
+              background: rgba(0, 0, 0, 0.5);
+              padding: 10px;
+              }
+              .carousel-caption {
+              top: 50;
+              bottom: auto;
+              }
+            </style>
+            <span class="noExistsTextImage">
+              <span class="noExistsText">
+                {{noExists}}
+              </span>
+            </span>
+            {{/if}}
+          </div>
 				</div>
 			{{/each}}
 		</div>
