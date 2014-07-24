@@ -1,52 +1,58 @@
-<script src="https://code.jquery.com/jquery-1.3.2.min.js"></script>
-<link href="https://rawgit.com/ekallevig/jShowOff/master/jshowoff.css" rel="stylesheet"></link>
-<script src="https://rawgit.com/ekallevig/jShowOff/master/jquery.jshowoff.min.js"></script>
-
-<style>
-  p.jshowoff-controls {
-    height: 28px !important;
-    overflow: hidden !important;
-  }
-  .posterBox {
-    display:inline !important;
-    float: right;
-  }
-  .movieInfoBox {
-    width:320px !important;
-    display:inline !important;
-    float: left !important;
-    margin: 3px 0 0 10px;
-  }
-</style>
-<div id="features">
-  {{#each objects}} 
-    <div>
-      <div class="movieInfoBox">
-        <span style="font-size: 20px; color: black; font-weight: bold;">{{Title}}</span><br/>        
-        <div style="margin: 4px 0 0 10px; width:320px">
-          <b>Year:</b> {{Year}}<br/>
-          <b>Released:</b> {{Released}}<br/>
-          <b>Runtime:</b> {{Runtime}}<br/>
-          <b>Genre:</b> {{Genre}}<br/>
-          <b>Language:</b> {{Language}}<br/>
-          <b>Awards:</b> {{Awards}}<br/>
-          <b>imdbRating:</b> {{imdbRating}}<br/>
-          <b>imdbVotes:</b> {{imdbVotes}}<br/>       
-          <b>Plot:</b> {{Plot}}
-        </div>
-       </div>
-       <div class=".posterBox">
-        <a href="http://www.imdb.com/title/{{imdbID}}" target="_blank"><img src="{{Poster}}" style="width:150px; height:222px;position:absolute;right:0px;"/></a>
-       </div>
-    </div>
-  {{/each}}
-</div>
-<script type="text/javascript">
-  $(document).ready(function(){ 
-      $('#features').jshowoff({
-				effect: 'slideLeft',
-				hoverPause: true,
-        speed: 10000
-			}); 
-   });
-</script>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
+    <script src="https://code.jquery.com/jquery-1.3.2.min.js" type="text/javascript"></script>
+    <link href="https://rawgit.com/ekallevig/jShowOff/master/jshowoff.css" rel="stylesheet"></link>
+    <script src="https://rawgit.com/ekallevig/jShowOff/master/jquery.jshowoff.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+  <style>
+    p.jshowoff-controls {
+      height: 28px !important;
+      overflow: hidden !important;
+    }
+    .posterBox {
+      display:inline !important;
+      float: right;
+    }
+    .movieInfoBox {
+      width:320px !important;
+      display:inline !important;
+      float: left !important;
+      margin: 3px 0 0 10px;
+    }
+  </style>
+  <div id="features">
+    {{#each objects}} 
+      <div>
+        <div class="movieInfoBox">
+          <span style="font-size: 20px; color: black; font-weight: bold;">{{Title}}</span><br/>        
+          <div style="margin: 4px 0 0 10px; width:320px">
+            <b>Year:</b> {{Year}}<br/>
+            <b>Released:</b> {{Released}}<br/>
+            <b>Runtime:</b> {{Runtime}}<br/>
+            <b>Genre:</b> {{Genre}}<br/>
+            <b>Language:</b> {{Language}}<br/>
+            <b>Awards:</b> {{Awards}}<br/>
+            <b>imdbRating:</b> {{imdbRating}}<br/>
+            <b>imdbVotes:</b> {{imdbVotes}}<br/>       
+            <b>Plot:</b> {{Plot}}
+          </div>
+         </div>
+         <div class=".posterBox">
+          <a href="http://www.imdb.com/title/{{imdbID}}" target="_blank"><img src="{{Poster}}" style="width:150px; height:222px;position:absolute;right:0px;"/></a>
+         </div>
+      </div>
+    {{/each}}
+  </div>
+  <script type="text/javascript">
+    $(document).ready(function(){ 
+        $('#features').jshowoff({
+				  effect: 'slideLeft',
+				  hoverPause: true,
+          speed: 10000
+			  }); 
+     });
+  </script>
+  </body>
+</html>

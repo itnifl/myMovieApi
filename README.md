@@ -18,8 +18,9 @@ This API uses omdbapi.com to fetch information about movies, thank you omdbapi.c
 	3. Perl scripts for for pre-made functionality.
 	4. Mongodb for caching
 
-### NB!! This code works as is, but the following is missing:
-	1. Several routes for different html templates can be used and added. These functionalities do not exist yet, but will be added whenever I feel like it.
+### NB!! This code works as is, but more can be added:
+- Several routes for different html templates can be used and added. 
+- Various other things in my private notes.
 
 
 Prerequisites
@@ -102,9 +103,10 @@ Delete the top level directory of the application.
 
 Example usage
 -------------
+To insert into a div tag with ID divField:
 
-```
-$.get( "http://yourApiHostnameHere:3000/moviesAsHTML", function(data) {
+```javascript
+$.get("http://yourApiHostnameHere:3000/moviesAsHTML/true", function(data) {
 	$('#divField').hide('fast', function() {
 		$(this).css('opacity',0.0).empty();
 		$(this).show('fast', function() {
@@ -115,11 +117,34 @@ $.get( "http://yourApiHostnameHere:3000/moviesAsHTML", function(data) {
 		        .html(data)
 		        .slideDown('fast')
 		        .animate({opacity: 1.0});
-	
 		});							
 });
 ```
-###Following routes exist:
+
+If the view dependencies crash with what you already have on your page, you can insert the API results into a iframe. Here the iframe has the id preview-iframe:
+
+```javascript
+$.get("http://nodenet.homelinux.net:3000/moviesAsHTML/large/true", function(data) {
+     $('#preview-iframe').hide('show', function() {
+		$(this).css('opacity',0.0).empty();
+		$(this).show('fast', function() {
+			$(this).css('opacity',1.0);
+			$('#preview-iframe')
+				.hide()
+				.css('opacity',0.0)
+				.slideDown('fast')
+				.animate({opacity: 1.0});
+				var iframe =  $('#preview-iframe');
+				var idoc = iframe[0].contentDocument;
+				idoc.open();
+				idoc.write(data);
+				idoc.close();	    
+		});
+	});							
+});
+```
+
+### Following routes exist:
 	1. '/' - lists all routes and theyr descriptions.
 	2. '/moviesAsHTML' - returns all movies in folder specified in sourceDir in config.js as a Bootstrap Carousel, but does not include dependecies(jQuer and Bootstrap).
 	3. '/moviesAsHTML/true' - returns all movies in folder specified in sourceDir in config.js as a Bootstrap Carousel, and does include dependecies.
@@ -128,6 +153,11 @@ $.get( "http://yourApiHostnameHere:3000/moviesAsHTML", function(data) {
 	6. '/getImage/:image'  - returns a cached image and returns it to the client, given that you know the file name and give it as the argument :image.
 
 All routes are found under http://yourhostname:port/ of the running MyMovieApi system.
+
+### Thank you:
+- http://omdbapi.com
+- http://ekallevig.com/jshowoff/
+- http://getbootstrap.com/
 
 Maintainers
 -----------
