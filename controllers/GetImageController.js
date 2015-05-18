@@ -16,20 +16,20 @@ function GetImageController() {
 util.inherits(GetImageController, BaseController);
 
 /**
- * GET /MoviesAsList
+ * GET /GetImageController
  * 
  * @param {Object} req Request
  * @param {Object} res Response
  */
 GetImageController.prototype.get = function(req, res) {
+  if(config.verbosedebug) util.log("Entered GetImageController via route: " + req.route.path.toString().toLowerCase());
+
   var GetImage = Model.get('GetImage').find(1);
   var image = req.params.image;
   GetImage.getImage(image, function(result) {
   		res.writeHead(200, {'Content-Type': 'image/jpeg' });
      	res.end(result);
-  		//res.send(result);
   });  
-  //util.log("Sending image by request to client..");
 };
 
 module.exports = new GetImageController();

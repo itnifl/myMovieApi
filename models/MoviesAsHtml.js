@@ -19,12 +19,12 @@ function MoviesAsHtml() {
 };
 _.extend(MoviesAsHtml, BaseModel);
 
-/**
+/***
  * MoviesAsHTML function.
  * @param {String} dir Directory to list movies as html from
  * @param {Object} responseHandler callback to handle response from this function
  */
-MoviesAsHtml.prototype.getAsHTML = function(dir, includedependencies, responseHandler) {  
+MoviesAsHtml.prototype.getAsHTML = function(dir, largeBool, includedependencies, responseHandler) {  
   var htmlReturn = "";
   BaseModel.getList(dir, function(movieList) {
 		if(config.debug) util.log("Received from base: '" + movieList + "' at MoviesAsHtml.getAsHTML()");
@@ -35,7 +35,13 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, includedependencies, responseHa
         if(movieList.length == 0) {
             movieList.push('No movie found');
             var handlebarsData = [{"Title": "None Found", "Year": "0000", "Poster": "http://" + config.serverHostname + ":" + config.serverPort + "/getImage/notValid.jpg", "noExists": "No movie found"}];
-            var source = includedependencies ? fs.readFileSync('./views/MoviesAsHtmlWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtml.template').toString();
+            
+            var source; 
+            if(largeBool) {
+            	source = includedependencies ? fs.readFileSync('./views/MoviesAsHtmlLargeWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtmlLarge.template').toString();
+            } else {
+            	source = includedependencies ? fs.readFileSync('./views/MoviesAsHtmlWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtml.template').toString();
+            }
             var template = Handlebars.compile(source);
             var wrapper = {objects: handlebarsData};
 			var htmlReturn = template(wrapper);	    
@@ -54,44 +60,41 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, includedependencies, responseHa
 			    function(waterfall_callback) {
 				    async.each(movieList, 
 					    function(movie, callback){
-						    //if(config.debug) util.log('Attempting to open a connection to mongodb if not already connected..');
-						    //mongodb.open(function(err) {
                             var err = undefined;
-			                    if(err) { 
-			                	    util.log("Received error while connecting to mongodb:" + err);
-			                	    callback();
-			                    } else {
-			                	    if(config.debug) console.log('.. success!');
-			                	    if(config.debug) util.log('Attempting fetch movie "' + movie + '" from mongodb..');
-				                    mongodb.getMovie(movie, function(cachedMovie) {
-				                	    if(cachedMovie.Response == false)  {
-				                		    if(config.debug) util.log('Attempting fetch movie "' + movie + '" from ' +config.api +'..');
-				                		    request("http://" + config.api + "/?t=" +movie, function(error, response, body) {
-											    var movieObj = JSON.parse(body);		
-											    if(movieObj.Response) {
-												    jsonText += body;	
-                                                    if(mongodb.db._state == 'connected') {				 
-								                        mongodb.saveMovie(movieObj, function(response) {
-								                	        if(response.status != 'success' && config.debug) util.log('Received error while trying to save and cache movie: "' + response.status + '"');
-								                	        else if(config.debug) util.log('Successfully saved movie to mongodb.. ');      			                    
-								                        }); 
-                                                    }
-								                    if(jsonText != '') jsonText += ', ';
-											    }								 	
-										 	    callback();
-										    });
-				                	    } else {
-				                		    var movieString = typeof cachedMovie == 'object' ? JSON.stringify(cachedMovie) : cachedMovie;
-				                		    var movieObj = typeof cachedMovie == 'object' ? cachedMovie : JSON.parse(cachedMovie);
-				                		    if(movieObj.Response) {
-				                			    jsonText += movieString;	
-				                			    if(jsonText != '') jsonText += ', ';
-				                		    }
-				                		    callback();
-				                	    }		                           			                    
-				                    });  
-			                    }              
-			                //});				
+		                    if(err) { 
+		                	    util.log("Received error while connecting to mongodb:" + err);
+		                	    callback();
+		                    } else {
+		                	    if(config.debug) console.log('.. success!');
+		                	    if(config.debug) util.log('Attempting fetch movie "' + movie + '" from mongodb..');
+			                    mongodb.getMovie(movie, function(cachedMovie) {
+			                	    if(cachedMovie.Response == false)  {
+			                		    if(config.debug) util.log('Attempting fetch movie "' + movie + '" from ' +config.api +'..');
+			                		    request("http://" + config.api + "/?t=" +movie, function(error, response, body) {
+										    var movieObj = JSON.parse(body);		
+										    if(movieObj.Response) {
+											    jsonText += body;	
+                                                if(mongodb.db._state == 'connected') {				 
+							                        mongodb.saveMovie(movieObj, function(response) {
+							                	        if(response.status != 'success' && config.debug) util.log('Received error while trying to save and cache movie: "' + response.status + '"');
+							                	        else if(config.debug) util.log('Successfully saved movie to mongodb.. ');      			                    
+							                        }); 
+                                                }
+							                    if(jsonText != '') jsonText += ', ';
+										    }								 	
+									 	    callback();
+									    });
+			                	    } else {
+			                		    var movieString = typeof cachedMovie == 'object' ? JSON.stringify(cachedMovie) : cachedMovie;
+			                		    var movieObj = typeof cachedMovie == 'object' ? cachedMovie : JSON.parse(cachedMovie);
+			                		    if(movieObj.Response) {
+			                			    jsonText += movieString;	
+			                			    if(jsonText != '') jsonText += ', ';
+			                		    }
+			                		    callback();
+			                	    }		                           			                    
+			                    });  
+		                    }              			
 				  	    },
 				  	    function(err) {		  		
 				  		    jsonText = jsonText.length > 2 ? jsonText.substring(0, jsonText.length - 2) : jsonText;
@@ -104,7 +107,12 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, includedependencies, responseHa
 				  		        var handlebarsData = JSON.parse(jsonText);
 				  		        if(config.debug) util.log('Assuming we have fetched "' + handlebarsData.length + '" movies..');
 				  		        try {
-					  		        var source = includedependencies ? fs.readFileSync('./views/MoviesAsHtmlWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtml.template').toString();			  		
+					  		        var source; 
+						            if(largeBool) {
+						            	source = includedependencies ? fs.readFileSync('./views/MoviesAsHtmlLargeWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtmlLarge.template').toString();
+						            } else {
+						            	source = includedependencies ? fs.readFileSync('./views/MoviesAsHtmlWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtml.template').toString();
+						            }
 						            var template = Handlebars.compile(source);
 
 						            if(!handlebarsData[0].Response) handlebarsData = [{"Title": "None Found", "Year": "0000", "Poster": "http://" + config.serverHostname + ":" + config.serverPort + "/getImage/notValid.jpg", "noExists": "No movie found"}];

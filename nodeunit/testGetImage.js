@@ -8,8 +8,8 @@ module.exports = {
         try {
             console.log('**Running Test Setup'.yellow);
             require('../modelLoader');
-            var moviesAsHtml = Model.get('GetImage').find(1);
-            moviesAsHtml.getImage('MV5BMTgzODgyNTQwOV5BMl5BanBnXkFtZTcwNzc0NTc0Mg@@._V1_SX300.jpg', function(feedback) {                                            
+            var GetImage = Model.get('GetImage').find(1);
+            GetImage.getImage('MV5BMTM4OTI1OTM5NF5BMl5BanBnXkFtZTcwMzk5MTU1Mg@@._V1_SX300.jpg', function(feedback) {                                            
                 imageResponse = feedback;
                 callback();                   
             }); 

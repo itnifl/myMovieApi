@@ -10,7 +10,8 @@ var config = require('../config');
  */
 function MoviesAsListController() {
   this.routes = [
-	['get', '/moviesAsList', this.get, 'Displays all movies in sourceDir as jSON']
+  	['get', '/moviesAsList', this.get, 'Displays all movies in sourceDir as JSON'],
+  	['get', '/moviesAsList?movieNameFilter=movieName', this.get, 'Displays specified movieName in sourceDir as JSON if it exists']
   ];
 }
 util.inherits(MoviesAsListController, BaseController);
@@ -23,7 +24,12 @@ util.inherits(MoviesAsListController, BaseController);
  */
 MoviesAsListController.prototype.get = function(req, res) {
   var MoviesAsList = Model.get('MoviesAsList').find(1);
-  MoviesAsList.getAsList(config.sourceDir, function(result) {
+  var movieNameFilter = req.query.movieNameFilter;
+
+  if(config.verbosedebug) util.log("Entered MoviesAsListController via route: " + req.route.path.toString().toLowerCase());
+
+  if(config.debug) util.log("Received filter: " + movieNameFilter);
+  MoviesAsList.getAsList(config.sourceDir, movieNameFilter, function(result) {
   		res.send(result);
   });  
   util.log("Sending movies as list by request..");

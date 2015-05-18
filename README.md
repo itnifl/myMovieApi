@@ -68,6 +68,10 @@ Download the latest stable version from Git with the following command:
 
 `git clone https://github.com/itnifl/myMovieApi.git -b master .`
 
+Make sure dependencies are met before we install the modules(Ubuntu):
+
+`apt-get install gcc make build-essential`
+
 Update all dependencies using the following command:
 
 `npm install`

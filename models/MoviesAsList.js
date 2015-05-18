@@ -21,7 +21,7 @@ _.extend(MoviesAsList, BaseModel);
  * @param {String} dir Directory to use content listing as movie names
  * @param {Object} responseHandler callback function with results
  */
-MoviesAsList.prototype.getAsList = function(dir, responseHandler) {
+MoviesAsList.prototype.getAsList = function(dir, movieFilterName, responseHandler) {
 	var request = require("request");
 	var async = require("async");
 	BaseModel.getList(dir, function(movieList) {
@@ -43,32 +43,37 @@ MoviesAsList.prototype.getAsList = function(dir, responseHandler) {
 				    });	
 			    }, 
 			    function(waterfall_callback) {
-				    async.each(movieList, 
+				    async.each(typeof movieFilterName === 'undefined' || movieFilterName == '' ? movieList : [movieFilterName], 
 					    function(movie, callback) {
 						    if(config.debug) util.log('Attempting fetch movie "' + movie + '" from mongodb..');
+						    function addJsonMovie(__movieString) {
+						    	jsonText += __movieString;
+		                		if(jsonText != '') jsonText += ', ';
+						    }
 				            mongodb.getMovie(movie, function(cachedMovie) {
 				        	    if(cachedMovie.Response == false)  {
 				            	    if(config.debug) util.log('Attempting fetch movie "' + movie + '" from ' +config.api +'..');
 								    request("http://" + config.api + "/?t=" +movie, function(error, response, body) {
 									    var movieObj = JSON.parse(body);		
 									    if(movieObj.Response) {
-										    jsonText += body;
+										    addJsonMovie(body);
                                             if(mongodb.db._state == 'connected') {
 										        mongodb.saveMovie(movieObj, function(response) {
 				                			        if(response.status != 'success' && config.debug) util.log('Received error while trying to save and cache movie: "' + response.status + '"');
 				                			        else if(config.debug) util.log('Successfully saved movie to mongodb.. ');      			                    
 				                		        }); 
                                             }
-										    if(jsonText != '') jsonText += ', ';
 									    }						 	
 						 			    callback();
 								    });
 							    } else {
 		                		    var movieString = typeof cachedMovie == 'object' ? JSON.stringify(cachedMovie) : cachedMovie;
 		                		    var movieObj = typeof cachedMovie == 'object' ? cachedMovie : JSON.parse(cachedMovie);
-		                		    if(movieObj.Response) {
-		                			    jsonText += movieString;	
-		                			    if(jsonText != '') jsonText += ', ';
+
+		                		    if(movieObj.Response && movieObj.Title == movieFilterName) {		                		    	
+		                			    addJsonMovie(movieString);
+		                		    } else if (movieObj.Response && (typeof movieFilterName === 'undefined' || movieFilterName == '')) {
+										addJsonMovie(movieString);
 		                		    }
 		                		    callback();
 	                		    }
