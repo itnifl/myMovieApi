@@ -9,3 +9,6 @@
 /sftp-config.json
 /npm-debug.log
 /coverCache
+!.gitignore
+/config.js
+!/coverCache/notValid.jpg
