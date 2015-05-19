@@ -1,7 +1,7 @@
 var config = require('../config');
 var util = require('util');
 var colors = require('colors');
-var mongodb, saveResponse, getResponse;
+var mongodb, saveResponse, getResponse, updateLikeResponse;
 
 var jSonMovie = {
     "Title":"Skyline",
@@ -23,7 +23,8 @@ var jSonMovie = {
     "imdbVotes":"65,030",
     "imdbID":"tt1564585",
     "Type":"movie",
-    "Response":"True"
+    "Response":"True",
+    "thumbsUp": 1
 };
 
 module.exports = {  
@@ -38,11 +39,15 @@ module.exports = {
                 mongodb.saveMovie(jSonMovie, function(firstResponse) {
                     //console.log('**Got saveResponse: '.yellow + firstResponse);
                     saveResponse = firstResponse;           
-                    mongodb.getMovie('Skyline', function(secondResponse) {
+                    mongodb.getMovie('Skyline', function(movie) {
                         //console.log('**Got getResponse: '.yellow + secondResponse);
-                        getResponse = secondResponse;
-                        mongodb.close();
-                        mainCallback();
+                        getResponse = movie;
+                        mongodb.changeMovieLike(movie._id, 1, function(thirdResponse) {
+                            //console.log('**Got getResponse: '.yellow + thirdResponse);
+                            updateLikeResponse = thirdResponse;
+                            mongodb.close();
+                            mainCallback();
+                        });
                     });
                 });                
             });
@@ -59,13 +64,15 @@ module.exports = {
         callback();
     },
     testMongoDB: function(test) {   
-        test.expect(2);           
-        console.log('**Running tests: '.yellow + '(2)');
+        test.expect(3);           
+        console.log('**Running tests: '.yellow + '(3)');
         //if(config.debug) console.log("**Got mongodb of type: ".yellow + (typeof mongodb));
         test.ok(saveResponse.status == 'success', "Failed saving to mongodb, check config.");
         if(config.debug) console.log("**Got saveResponse : ".yellow + JSON.stringify(saveResponse, undefined, 2));
         test.ok(typeof getResponse !== 'undefined' && getResponse.Response, "Failed fetching movie from mongodb, check config.");
         if(config.debug) console.log("**Got getResponse : ".yellow + JSON.stringify(getResponse, undefined, 2));
+        test.ok(typeof updateLikeResponse !== 'undefined' && updateLikeResponse.status, "Failed updating likes movie in mongodb, check config.");
+        if(config.debug) console.log("**Got updateLikeResponse : ".yellow + JSON.stringify(updateLikeResponse, undefined, 2));
         test.done();                            
     }
 }; 
