@@ -40,7 +40,7 @@
           </div>
          </div>
          <div class=".posterBox">
-          <a href="http://www.imdb.com/title/{{imdbID}}" target="_blank"><img src="{{Poster}}" style="width:150px; height:222px;position:absolute;right:0px;"/></a>
+          <a href="http://www.imdb.com/title/{{imdbID}}" target="_blank"><img src="{{Poster}}" style="width:150px;height:222px;position:absolute;right:0px;"/></a>
          </div>
       </div>
     {{/each}}

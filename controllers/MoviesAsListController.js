@@ -26,13 +26,13 @@ MoviesAsListController.prototype.get = function(req, res) {
   var MoviesAsList = Model.get('MoviesAsList').find(1);
   var movieNameFilter = req.query.movieNameFilter;
 
-  if(config.verbosedebug) util.log("Entered MoviesAsListController via route: " + req.route.path.toString().toLowerCase());
+  if(config.verbosedebug) util.log('Entered MoviesAsListController via route: ' + req.route.path.toString() +  ' from ip ' + req.connection.remoteAddress);
 
   if(config.debug) util.log("Received filter: " + movieNameFilter);
   MoviesAsList.getAsList(config.sourceDir, movieNameFilter, function(result) {
   		res.send(result);
   });  
-  util.log("Sending movies as list by request..");
+  util.log("Sending movies as list by request from ip " + req.connection.remoteAddress);
 };
 
 module.exports = new MoviesAsListController();

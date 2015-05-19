@@ -31,7 +31,7 @@ Root.prototype.getApi = function(responseHandler) {
         if (allRoutes[i].hasOwnProperty('routes')) {
           allRoutes[i].routes.forEach(function (item) {
             if(config.debug) console.log("   - Verb: " + item[0] + " - Route: " + item[1] + " - '" + item[3] + "'");
-            allRoutesResult.push({verb : item[0], route: item[1], description: item[3] });
+            allRoutesResult.push({verb : item[0], route: item[1], description: item[3], routeLink: '//' + config.serverHostname + ':' + config.serverPort + item[1]});
           });
         }
     }

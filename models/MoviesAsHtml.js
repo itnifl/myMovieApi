@@ -22,10 +22,23 @@ _.extend(MoviesAsHtml, BaseModel);
 /***
  * MoviesAsHTML function.
  * @param {String} dir Directory to list movies as html from
+ * @param {String} reqRoutePath The route that was used in the request
+ * @param {Boolean} includedependencies Boolean to decide if dependencies should be included with the view
  * @param {Object} responseHandler callback to handle response from this function
  */
-MoviesAsHtml.prototype.getAsHTML = function(dir, largeBool, includedependencies, responseHandler) {  
+MoviesAsHtml.prototype.getAsHTML = function(dir, reqRoutePath, includedependencies, responseHandler) {  
   var htmlReturn = "";
+  function getView(__reqRoutePath) { 
+    if(__reqRoutePath.split(':')[0] == '/moviesAsHTML/large/' || __reqRoutePath.split(':')[0] == '/moviesAsHTML/large') {
+    	return includedependencies ? fs.readFileSync('./views/MoviesAsHtmlLargeWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtmlLarge.template').toString();
+    } else if(__reqRoutePath.split(':')[0] == '/moviesAsHTML/' || __reqRoutePath.split(':')[0] == '/moviesAsHTML') {
+    	return includedependencies ? fs.readFileSync('./views/MoviesAsHtmlWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtml.template').toString();
+    } else if(__reqRoutePath.split(':')[0] == '/moviesAsHTMLList') {
+    	return fs.readFileSync('./views/MoviesAsHtmlListWithDependencies.template').toString();
+    } else {
+    	return fs.readFileSync('./views/MoviesAsHtmlLargeWithDependencies.template').toString()
+    }  	
+  }
   BaseModel.getList(dir, function(movieList) {
 		if(config.debug) util.log("Received from base: '" + movieList + "' at MoviesAsHtml.getAsHTML()");
 		var mongodb = new MongoDB(config.mongoServer, config.mongoPort);
@@ -35,13 +48,7 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, largeBool, includedependencies,
         if(movieList.length == 0) {
             movieList.push('No movie found');
             var handlebarsData = [{"Title": "None Found", "Year": "0000", "Poster": "http://" + config.serverHostname + ":" + config.serverPort + "/getImage/notValid.jpg", "noExists": "No movie found"}];
-            
-            var source; 
-            if(largeBool) {
-            	source = includedependencies ? fs.readFileSync('./views/MoviesAsHtmlLargeWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtmlLarge.template').toString();
-            } else {
-            	source = includedependencies ? fs.readFileSync('./views/MoviesAsHtmlWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtml.template').toString();
-            }
+            var source = getView(reqRoutePath);
             var template = Handlebars.compile(source);
             var wrapper = {objects: handlebarsData};
 			var htmlReturn = template(wrapper);	    
@@ -62,6 +69,7 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, largeBool, includedependencies,
 					    function(movie, callback){
                             var err = undefined;
 		                    if(err) { 
+		                    	if(config.debug) console.log('.. failed!');
 		                	    util.log("Received error while connecting to mongodb:" + err);
 		                	    callback();
 		                    } else {
@@ -107,12 +115,7 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, largeBool, includedependencies,
 				  		        var handlebarsData = JSON.parse(jsonText);
 				  		        if(config.debug) util.log('Assuming we have fetched "' + handlebarsData.length + '" movies..');
 				  		        try {
-					  		        var source; 
-						            if(largeBool) {
-						            	source = includedependencies ? fs.readFileSync('./views/MoviesAsHtmlLargeWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtmlLarge.template').toString();
-						            } else {
-						            	source = includedependencies ? fs.readFileSync('./views/MoviesAsHtmlWithDependencies.template').toString() : fs.readFileSync('./views/MoviesAsHtml.template').toString();
-						            }
+					  		        var source = getView(reqRoutePath);
 						            var template = Handlebars.compile(source);
 
 						            if(!handlebarsData[0].Response) handlebarsData = [{"Title": "None Found", "Year": "0000", "Poster": "http://" + config.serverHostname + ":" + config.serverPort + "/getImage/notValid.jpg", "noExists": "No movie found"}];
@@ -131,7 +134,7 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, largeBool, includedependencies,
 						            var htmlReturn = template(wrapper);	    
 							        responseHandler(htmlReturn);
 				  		        } catch (err) {
-				  			        if(config.debug) util.log('Failed to load ' + (includedependencies ? 'MoviesAsHtmlWithDependencies.template' : '(MoviesAsHtml.template)') +', ' + err);
+				  			        if(config.debug) util.log('Failed to load template view ' + source +', ' + err);
 				  			        responseHandler(err);				  			
 				  		        }		    
 				  		        waterfall_callback(null);	

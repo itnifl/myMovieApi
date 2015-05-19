@@ -32,14 +32,15 @@ MongoDB.prototype.close = function() {
 MongoDB.prototype.open = function(responseHandler) {
 	if(config.verbosedebug) util.log('DB connection status is: ' + this.db._state + "..");
 	if(this.db._state != 'connecting' && this.db._state != 'connected') {
+        if (config.debug) util.log("Connecting to the 'movies' collection..");
 		this.db.open(function(err, db) {
 		    if (!err) {
-		        if (config.debug) util.log("Connected to the 'movies' database..");
+		        if (config.debug) util.log("Connected to the 'movies' collection..");
 				db.collection('movies', {strict:true}, function(err, collection) {
-				    if (err && config.debug) util.log("The 'movies' collection doesn't exist: " + err);
+				    if (err && config.debug) util.log("Something happened when connecting to the 'movies' collection: " + err);
 		        });
 		    } else {
-		    	if (config.debug) util.log("Failed connecting to 'movies' database: " + err);
+		    	if (config.debug) util.log("Failed connecting to 'movies' collection: " + err);
 		    }
 		    responseHandler(err);  
 		});	
