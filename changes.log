@@ -1,0 +1,47 @@
+***Changes before 20.07.2014:
+- Improved logging.
+- Improved Readme.md.
+- Wrote nodeunit tests for all models up until now.
+- Improved MovieAsHtml model and controller.
+- Added view MoviesAsHtmlWithDependencies.template and code for handeling it.
+- Added Code to display all api routes and usages when entering root /.
+- Added code to handle saving and fetching from mongodb, and embedded that into previous code for usage.
+
+***Changes on 20.07.2014:
+- Added error handeling if perl is not installed.
+- Added error handeling if movieDir is empty.
+- Improved minor syntax mistakes for code to work on bot Linux and Windows.
+- Fixed error where api does not reply if database is not available.
+
+***Changes on 23.07.2014:
+- Created a default html response if no movies are found.
+- Added new route /moviesAsHTML/large/:includedependencies
+- nodeunit tested the new route and verified previous tests
+
+***Changes on 24.07.2014:
+- Updated the view templates that include dependencies to have full HTML markup.
+- Updated Readme.md
+
+***Changes on 18.05.2015:
+- Added filtering capabillity when listing movies as JSON, thus creating a new possible route.
+- Merged the MoviesAsHtml model with the MoviesAsHtmlLarge model.
+- Added more information to verbose logging.
+- Updated Readme.md
+
+***Changes on 19.05.2015:
+- Source IP address is now included in the verbosedebug log and regular log.
+- Route listing now links to the routes it displays.
+- Let GetImage model return a default image if the requested one is not found.
+- Created a new view that is handeled by the corresponding controllers.
+
+***Changes on 20.05.2015:
+- Created a working controller and model that receives thumbs up and down and stores them on the movie object in MongoDb.
+- Update MoviesAsHtmlListWithDependencies.template so that it may post thumbs to this controller
+
+***To be done:
+- Make sure thumbs can only be changed up or down once per session.
+- Amount of thumbs up or down must be shown in the view.
+- Perhaps using socket.io
+- Testing of new controller needs to be done and all test controllers need to be re-run
+
+- Comitt uten fast forward

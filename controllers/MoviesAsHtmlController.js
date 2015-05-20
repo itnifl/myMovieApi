@@ -32,10 +32,10 @@ MoviesAsHtmlController.prototype.get = function(req, res) {
 
   if(config.verbosedebug) util.log("Entered MoviesAsHtmlController via route: " + req.route.path.toString() + " from ip " + req.connection.remoteAddress);
   MoviesAsHTML.getAsHTML(config.sourceDir, req.route.path.toString(), includedependencies, function(result) {
+      util.log("Sending movies as HTML by request from ip " + req.connection.remoteAddress);
   		if(typeof result === 'undefined') res.send('<p>Error: No movies found - is the api configured correctly?</p>');
         else res.send(result);
-  });
-  util.log("Sending movies as HTML by request from ip " + req.connection.remoteAddress);
+  });  
 };
 
 

@@ -2,7 +2,7 @@
 /node_modules
 /WEB.sublime-workspace
 /WEB.sublime-project
-/changes.log
+!/changes.log
 /web-mymovieapi.njsproj
 /web-mymovieapi.sln
 /web-mymovieapi.v12.suo

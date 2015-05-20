@@ -10,7 +10,7 @@ var config = require('../config');
  */
 function UpdateThumbsController() {
   this.routes = [
-	 ['put', '/updateLikes/:integer', this.post,Thumbs 'Updates thumbs up (positive :integer) and thumbs down (negative :integer) on movies in MongoDB']
+	 ['put', '/updateThumbs/:id/:integer', this.putThumbs, 'Increments thumbs up (positive put integer) and thumbs down (negative put integer) on movie (put _id) in MongoDB']
   ];
 }
 util.inherits(UpdateThumbsController, BaseController);
@@ -25,19 +25,26 @@ UpdateThumbsController.prototype.putThumbs = function(req, res) {
   if(config.verbosedebug) util.log("Entered UpdateThumbsController via route: " + req.route.path.toString() + " from ip " + req.connection.remoteAddress);
   var UpdateThumbs = Model.get('UpdateThumbs').find(1);
 
-  //Parameters need to be fetched via put and tested:
-  var integer = req.body.integer;
-  var _id = req.body._id;
+  var thumbInteger = req.params.integer;
+  var _id = req.params.id;
 
-  var thumbsUp = 0;
-  var thumbsDown = 0;
-  if(integer > 0) thumbsUp += 1;
-  else if(integer < 0) thumbsDown += 1;
-  else return;
+  if(!thumbInteger) {
+    if(config.debug) util.log('Parameter integer was either 0 or non valued, exiting.');
+    res.send({status: 'failed'})
+  };
 
-  UpdateThumbs.update(thumbsUp, thumbsDown, _id, function(response) {
-    if(response.status != 'success' && config.debug) util.log('Failed to update thumbs information on movie "' + response.status + '"');
-  })
+  if(_id != '' || typeof _id !== undefined) {
+    UpdateThumbs.update(thumbInteger, _id, function(response) {
+      if(response.status != 'success' && config.debug) util.log('Failed to update thumbs information on movie "' + response + '"');
+      else {
+        util.log('Updated thumbs on movie with id ' + _id + ' successfully.')
+        res.send({status: 'success'})
+      };
+    });
+  } else {
+     if(config.debug) util.log('Parameter _id was either empty or undefined, exiting.');
+     res.send({status: 'failed'})
+  }
 };
 
 module.exports = new UpdateThumbsController();

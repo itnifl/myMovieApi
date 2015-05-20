@@ -128,6 +128,7 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, reqRoutePath, includedependenci
 								    	        request.get(handlebarsData[i].Poster).pipe(responsestream);
 								            }
 								            handlebarsData[i].Poster = "http://" + config.serverHostname + ":" + config.serverPort + "/getImage/" + filename;
+								            handlebarsData[i].URL = "http://" + config.serverHostname + ":" + config.serverPort;
 							            }
 							        }
 						            var wrapper = {objects: handlebarsData};
