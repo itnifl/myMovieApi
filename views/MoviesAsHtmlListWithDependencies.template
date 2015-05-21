@@ -1,8 +1,19 @@
 <html>
   <head>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"></link>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="{{objects.1.URL}}/scripts/md5_device_fingerprint.js"></script>
+    <script>
+      var socket = io.connect('{{objects.1.URL}}');
+      socket.on('updateThumbCount', function (data) {
+        if(data.Response) {
+          $('#thumbDownNr-' + data._id).html(data.thumbsDown);
+          $('#thumbUpNr-' + data._id).html(data.thumbsUp);
+        }       
+      });
+  </script>
   </head>
   <body>
   <style>
@@ -11,7 +22,11 @@
     }
     .glyphiconThumbsBlue, .glyphiconThumbsRed {
       font-size: 2.0em;
+      margin-right:4px;
 
+    }
+    .glyphiconThumbsBlue {
+      margin-left:20px;
     }
     .glyphiconThumbsBlue:hover {
       color:Blue;
@@ -47,24 +62,24 @@
             <b>imdbVotes:</b> {{imdbVotes}}<br/>       
             <b>Plot:</b> {{Plot}}
             <div style="position:absolute;bottom:20; left:20;">
-              <span class="glyphicon glyphicon-thumbs-down glyphiconThumbsRed" style="margin-right:30px;" id="thumbDown{{_id}}" data-id="{{_id}}"></span>
-              <span class="glyphicon glyphicon-thumbs-up glyphiconThumbsBlue" id="thumbUp{{_id}}" data-id="{{_id}}"></span>
+              <span class="glyphicon glyphicon-thumbs-down glyphiconThumbsRed" id="thumbDownGlyph-{{_id}}" data-id="{{_id}}"></span><span id="thumbDownNr-{{_id}}">{{thumbsDown}}</span>
+              <span class="glyphicon glyphicon-thumbs-up glyphiconThumbsBlue" id="thumbUpGlyph-{{_id}}" data-id="{{_id}}"></span><span id="thumbUpNr-{{_id}}">{{thumbsUp}}</span>
               <script type="text/javascript">
-                $('#thumbDown{{_id}}').click(function () {
+                $('#thumbDownGlyph-{{_id}}').click(function () {
                   $.ajax({
-                    url: "{{URL}}/updateThumbs/{{_id}}/-1",
+                    url: "{{URL}}/updateThumbs/{{_id}}/-1/" + window.fingerprint.md5hash,
                     method: "PUT",
-                    data: JSON.stringify({ id : '{{_id}}', integer : -1 }),
+                    data: { md5fingerprint: window.fingerprint.md5hash },
                     contentType: "application/json",
                     dataType: 'json'
                   });
 
                 });
-                $('#thumbUp{{_id}}').click(function () {
+                $('#thumbUpGlyph-{{_id}}').click(function () {
                   $.ajax({
-                    url: "{{URL}}/updateThumbs/{{_id}}/1",
+                    url: "{{URL}}/updateThumbs/{{_id}}/1/" + window.fingerprint.md5hash,
                     method: "PUT",
-                    data: JSON.stringify({ id : '{{_id}}', integer : 1 }),
+                    data: { md5fingerprint: window.fingerprint.md5hash },
                     contentType: "application/json",
                     dataType: 'json'
                   });

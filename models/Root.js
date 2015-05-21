@@ -23,7 +23,7 @@ _.extend(Root, BaseModel);
 Root.prototype.getApi = function(responseHandler) {
 	var allRoutes = new Array();
 	var allRoutesResult = new Array();
-	var vars = '';
+	//var vars = '';
 	fs.readdirSync('./controllers').forEach(function (file) {
 	    allRoutes.push(require('../controllers/' + file));   
   	});	

@@ -30,15 +30,15 @@ UpdateThumbs.prototype.update = function(thumbInteger, _id, responseHandler) {
 	    function(waterfall_callback) {
 		    util.log("Attempting to connect to mongodb in UpdateThumbs.update() ..");
 		    mongodb.open(function(connectionResponse) {
-		    	mongodb.changeMovieThumbs(_id, thumbInteger, function(thumbUpdateResponse) {
-		    		util.log(JSON.stringify(thumbUpdateResponse));
+		    	mongodb.updateMovieThumbs(_id, thumbInteger, function(thumbUpdateResponse) {
+		    		if(config.debug) util.log('Received info about thumbs to put in MongoDb: ' + JSON.stringify(thumbUpdateResponse));
 	        	    if(thumbUpdateResponse.Response == false)  {
 	            	    if(config.debug) util.log('Failed to update thumbs on id "' + _id + ' when using integer: ' + thumbInteger + '..');
-	            	    responseHandler({status: 'failed'});
+	            	    responseHandler({status: false});
 	            	    waterfall_callback(null); 			    
 				    } else {
 				    	if(config.debug) util.log('Successfully updated thumbs on id "' + _id + ' when using integer: ' + thumbInteger + '..');
-				    	responseHandler({status: 'success'});
+				    	responseHandler({status: true});
 				    	waterfall_callback(null);
 	    		    }		    		    
     	    	});		   

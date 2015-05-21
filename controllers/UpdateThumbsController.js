@@ -1,6 +1,7 @@
 var util = require('util');
 var BaseController = require('../baseController.js');
 var config = require('../config');
+var root = require('../server.js');
 
 /**
  * Constructor.
@@ -10,7 +11,7 @@ var config = require('../config');
  */
 function UpdateThumbsController() {
   this.routes = [
-	 ['put', '/updateThumbs/:id/:integer', this.putThumbs, 'Increments thumbs up (positive put integer) and thumbs down (negative put integer) on movie (put _id) in MongoDB']
+	 ['put', '/updateThumbs/:id/:integer/:md5fingerprint', this.putThumbs, 'Increments thumbs up (positive put :integer) and thumbs down (negative put :integer) on movie (put :id) in MongoDB identified by a :md5fingerprint']
   ];
 }
 util.inherits(UpdateThumbsController, BaseController);
@@ -23,28 +24,64 @@ util.inherits(UpdateThumbsController, BaseController);
  */
 UpdateThumbsController.prototype.putThumbs = function(req, res) { 
   if(config.verbosedebug) util.log("Entered UpdateThumbsController via route: " + req.route.path.toString() + " from ip " + req.connection.remoteAddress);
-  var UpdateThumbs = Model.get('UpdateThumbs').find(1);
+  
+  var session = req.session;
+  session.md5fingerprint = req.params.md5fingerprint;
 
-  var thumbInteger = req.params.integer;
-  var _id = req.params.id;
-
-  if(!thumbInteger) {
-    if(config.debug) util.log('Parameter integer was either 0 or non valued, exiting.');
-    res.send({status: 'failed'})
-  };
-
-  if(_id != '' || typeof _id !== undefined) {
-    UpdateThumbs.update(thumbInteger, _id, function(response) {
-      if(response.status != 'success' && config.debug) util.log('Failed to update thumbs information on movie "' + response + '"');
-      else {
-        util.log('Updated thumbs on movie with id ' + _id + ' successfully.')
-        res.send({status: 'success'})
-      };
-    });
-  } else {
-     if(config.debug) util.log('Parameter _id was either empty or undefined, exiting.');
-     res.send({status: 'failed'})
+  if(!session.md5fingerprint.match(/[a-fA-F0-9]{32}/g)) {
+    if(config.verbosedebug) util.log('Tried to enter UpdateThumbsController without a valid md5.');
+    res.send({status: false, message: 'Tried to enter UpdateThumbsController without a valid md5.'});
   }
-};
+
+  if(session.md5fingerprint) {
+    var UpdateThumbs = Model.get('UpdateThumbs').find(1);
+
+    var thumbInteger = req.params.integer;
+    var _id = req.params.id;
+
+    if(!thumbInteger) {
+      if(config.debug) util.log('Parameter integer was either 0 or non valued, exiting.');
+      res.send({status: false});
+    };
+    if(!session.thumbUp) {
+      session.thumbUp = {
+        _id: false
+      };
+    }
+    if(!session.thumbDown) {
+      session.thumbDown = {
+        _id: false
+      };
+    }
+
+    if(_id != '' || typeof _id !== undefined) {
+      if(session.thumbUp[_id] && thumbInteger > 0) {
+        if(config.verbosedebug) util.log('Client denied updating thumbUp count since this is already done once on movie with id ' + _id);
+        res.send({status: false, message: 'You can only press thumb up once per movie'});
+      } else if(session.thumbDown[_id] && thumbInteger < 0) {
+        if(config.verbosedebug) util.log('Client denied updating thumbDown count since this is already done once on movie with id ' + _id);
+        res.send({status: false, message: 'You can only press thumb down once per movie'});
+      } else {
+        UpdateThumbs.update(thumbInteger, _id, function(response) {
+          if(response.status != true && config.debug) util.log('Failed to update thumbs information on movie "' + response + '"');
+          else {
+            util.log('Updated thumbs on movie with id ' + _id + ' successfully.');
+            root.notifyThumbChange(_id, function() {
+              if(thumbInteger > 0) session.thumbUp[_id] = true;
+              if(thumbInteger < 0) session.thumbDown[_id] = true;
+              res.send({status: true});
+            });
+          };
+        });
+      }
+    } else {
+       if(config.debug) util.log('Parameter _id was either empty or undefined, exiting.');
+       res.send({status: false})
+    }
+  } else {
+    if(config.debug) util.log('Client does not have a session md5 hash, and is therefore not allowed to update thumb counts.');
+    res.send({status: false});
+  }
+}
 
 module.exports = new UpdateThumbsController();

@@ -162,6 +162,7 @@ All routes are found under http://yourhostname:port/ of the running MyMovieApi s
 - http://omdbapi.com
 - http://ekallevig.com/jshowoff/
 - http://getbootstrap.com/
+- https://gist.github.com/splosch/eaacc83f245372ae98fe
 
 Maintainers
 -----------

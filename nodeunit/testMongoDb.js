@@ -1,5 +1,4 @@
 var config = require('../config');
-var util = require('util');
 var colors = require('colors');
 var mongodb, saveResponse, getResponse, updateLikeResponse;
 
@@ -42,7 +41,7 @@ module.exports = {
                     mongodb.getMovie('Skyline', function(movie) {
                         //console.log('**Got getResponse: '.yellow + secondResponse);
                         getResponse = movie;
-                        mongodb.changeMovieThumbs(movie._id, 1, function(thirdResponse) {
+                        mongodb.updateMovieThumbs(movie._id, 1, function(thirdResponse) {
                             //console.log('**Got getResponse: '.yellow + thirdResponse);
                             updateLikeResponse = thirdResponse;
                             mongodb.close();
@@ -71,7 +70,7 @@ module.exports = {
         if(config.debug) console.log("**Got saveResponse : ".yellow + JSON.stringify(saveResponse, undefined, 2));
         test.ok(typeof getResponse !== 'undefined' && getResponse.Response, "Failed fetching movie from mongodb, check config.");
         if(config.debug) console.log("**Got getResponse : ".yellow + JSON.stringify(getResponse, undefined, 2));
-        test.ok(typeof updateLikeResponse !== 'undefined' && updateLikeResponse.status, "Failed updating likes movie in mongodb, check config.");
+        test.ok(typeof updateLikeResponse !== 'undefined' && updateLikeResponse.Response, "Failed updating thombs on movie in mongodb.");
         if(config.debug) console.log("**Got updateLikeResponse : ".yellow + JSON.stringify(updateLikeResponse, undefined, 2));
         test.done();                            
     }

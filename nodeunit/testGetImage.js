@@ -1,5 +1,4 @@
 var config = require('../config');
-var util = require('util');
 var colors = require('colors');
 var imageResponse = '';
 

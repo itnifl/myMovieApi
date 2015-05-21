@@ -113,6 +113,7 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, reqRoutePath, includedependenci
                             } else {
 				  		        if(config.debug) util.log('Attempting to render view for all movies fetched..');
 				  		        var handlebarsData = JSON.parse(jsonText);
+				  		       
 				  		        if(config.debug) util.log('Assuming we have fetched "' + handlebarsData.length + '" movies..');
 				  		        try {
 					  		        var source = getView(reqRoutePath);

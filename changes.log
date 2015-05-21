@@ -38,10 +38,10 @@
 - Created a working controller and model that receives thumbs up and down and stores them on the movie object in MongoDb.
 - Update MoviesAsHtmlListWithDependencies.template so that it may post thumbs to this controller
 
-***To be done:
-- Make sure thumbs can only be changed up or down once per session.
-- Amount of thumbs up or down must be shown in the view.
-- Perhaps using socket.io
-- Testing of new controller needs to be done and all test controllers need to be re-run
+***Changes on 21.05.2015:
+- Amount of thumbs up or down is now shown in the html list view using handlebars and updated with socket.io on all clients
+- Made sure thumbs can only be changed up or down once per session, where a session is identified as a presence of a md5 hash identifying the browser.
+- All tests have been run and verified, new tests made for new code.
 
-- Comitt uten fast forward
+***To be done:
+- Style the new MoviesAsHtmlListWithDependencies view better.
