@@ -154,7 +154,10 @@ $.get("http://nodenet.homelinux.net:3000/moviesAsHTML/large/true", function(data
 	3. '/moviesAsHTML/true' - returns all movies in folder specified in sourceDir in config.js as a Bootstrap Carousel, and does include dependecies.
 	4. '/moviesAsHTML/large/:includedependencies' - displays all movies in sourceDir as HTML carousel with jsShowOff and includes dependencies(jQuery and jsShowOff).
 	5. '/moviesAsList - returns jSON formattet information about all movies in folder specified in variable sourceDir in config.js as presented by omdbapi.com.
-	6. '/getImage/:image'  - returns a cached image and returns it to the client, given that you know the file name and give it as the argument :image.
+	6. ' /moviesAsList?movieNameFilter=movieName'	-  returns jSON formattet information about only the movie specified as movieName.
+	7. '/getImage/:image'  - returns a cached image and returns it to the client, given that you know the file name and give it as the argument :image.
+	8. '/moviesAsHTMLList'	- return all movies in sourceDir as HTML tabled list and includes jQuery and Bootstrap
+	9. '/updateThumbs/:id/:integer/:md5fingerprint'	- updates the thumb info of a movie with :id. Md5fingerprint needed as session identifier. This is derived from the client as an identificator of the client.
 
 All routes are found under http://yourhostname:port/ of the running MyMovieApi system.
 
