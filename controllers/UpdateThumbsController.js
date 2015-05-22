@@ -1,4 +1,5 @@
 var util = require('util');
+var async = require("async");
 var BaseController = require('../baseController.js');
 var config = require('../config');
 var root = require('../server.js');
@@ -56,21 +57,51 @@ UpdateThumbsController.prototype.putThumbs = function(req, res) {
 
     if(_id != '' || typeof _id !== undefined) {
       if(session.thumbUp[_id] && thumbInteger > 0) {
-        if(config.verbosedebug) util.log('Client denied updating thumbUp count since this is already done once on movie with id ' + _id);
+        if(config.verbosedebug) util.log('Client (' + req.connection.remoteAddress + ') denied updating thumbUp count since this is already done once on movie with id ' + _id);
         res.send({status: false, message: 'You can only press thumb up once per movie'});
       } else if(session.thumbDown[_id] && thumbInteger < 0) {
-        if(config.verbosedebug) util.log('Client denied updating thumbDown count since this is already done once on movie with id ' + _id);
+        if(config.verbosedebug) util.log('Client (' + req.connection.remoteAddress + ') denied updating thumbDown count since this is already done once on movie with id ' + _id);
         res.send({status: false, message: 'You can only press thumb down once per movie'});
       } else {
         UpdateThumbs.update(thumbInteger, _id, function(response) {
           if(response.status != true && config.debug) util.log('Failed to update thumbs information on movie "' + response + '"');
-          else {
-            util.log('Updated thumbs on movie with id ' + _id + ' successfully.');
-            root.notifyThumbChange(_id, function() {
-              if(thumbInteger > 0) session.thumbUp[_id] = true;
-              if(thumbInteger < 0) session.thumbDown[_id] = true;
-              res.send({status: true});
-            });
+          else {            
+            async.waterfall([
+              function(waterfall_callback) {
+                if(thumbInteger > 0) session.thumbUp[_id] = true;
+                if(thumbInteger < 0) session.thumbDown[_id] = true;
+                waterfall_callback(null);
+              },
+              function(waterfall_callback) {
+                if(thumbInteger > 0 && session.thumbDown[_id]) {
+                  UpdateThumbs.remove(-1, _id, function(response) {
+                    session.thumbDown[_id] = false;
+                    root.notifyThumbChange(_id, function() {
+                      res.send({status: true});
+                      waterfall_callback(null);
+                    });
+                  });
+                } else if(thumbInteger < 0 && session.thumbUp[_id]) {
+                  UpdateThumbs.remove(1, _id, function(response) {
+                    session.thumbUp[_id] = false;
+                    root.notifyThumbChange(_id, function() {
+                      res.send({status: true});
+                      waterfall_callback(null);
+                    });
+                  });
+                } else {
+                  root.notifyThumbChange(_id, function() {
+                    res.send({status: true});
+                    waterfall_callback(null);
+                  });              
+                }
+              }
+            ], function(err) {
+                if(err && config.debug) util.log("Received error after async waterfall in UpdateThumbsController.putThumbs(): " + err);
+                if(err) return err;       
+                util.log('Updated thumbs on movie with id ' + _id + ' successfully.');
+              }     
+            );
           };
         });
       }

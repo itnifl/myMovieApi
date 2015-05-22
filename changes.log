@@ -43,5 +43,15 @@
 - Made sure thumbs can only be changed up or down once per session, where a session is identified as a presence of a md5 hash identifying the browser.
 - All tests have been run and verified, new tests made for new code.
 
+***Changes on 22.05.2015:
+- Added pace.js to the MoviesAsHtmlListWithDependencies view.
+- Made sure a thumb up is removed if thumb down is pressed, if thumb up was already pressed by the same user already.
+- Styled the new MoviesAsHtmlListWithDependencies view better.
+- Fixed thumb control not working when first time retrieve of movie to dabase occurs.
+- Added error message regarding thumb functionality if database is not available or movie cannot be fetched from the database.
+
 ***To be done:
-- Style the new MoviesAsHtmlListWithDependencies view better.
+- Add a control bar at the top of MoviesAsHtmlListWithDependencies that lets you choose sorting options
+- Create a download link
+- Create a pirate bay link
+- Figure out why Bridge to Terabithia is never found by Title in the database, even when it is there.

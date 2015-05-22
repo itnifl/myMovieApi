@@ -1,7 +1,9 @@
 <html>
   <head>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <link href="{{objects.1.URL}}/css/pace.css" rel="stylesheet" />
+    <script src="{{objects.1.URL}}/scripts/pace.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>    
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"></link>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="{{objects.1.URL}}/scripts/md5_device_fingerprint.js"></script>
@@ -13,7 +15,7 @@
           $('#thumbUpNr-' + data._id).html(data.thumbsUp);
         }       
       });
-  </script>
+    </script>
   </head>
   <body>
   <style>
@@ -39,58 +41,100 @@
     .table-nonfluid {
       width: auto !important;
     }
-  </style>
-  <table class="table table-condensed table-bordered table-nonfluid" width="722" style="margin-left:auto;margin-right:auto;">
-    <tbody>
-      {{#each objects}} 
-      <tr>
-        <td width="301">
-          <div class="image">
-            <a href="http://www.imdb.com/title/{{imdbID}}" target="_blank"><img src="{{Poster}}"/></a>
-          </div>
-        </td>
-        <td style="position:relative;">
-          <span style="font-size: 20px; color: black; font-weight: bold;">{{Title}}</span><br/>        
-          <div style="margin: 4px 0 0 10px; width:420px">
-            <b>Year:</b> {{Year}}<br/>
-            <b>Released:</b> {{Released}}<br/>
-            <b>Runtime:</b> {{Runtime}}<br/>
-            <b>Genre:</b> {{Genre}}<br/>
-            <b>Language:</b> {{Language}}<br/>
-            <b>Awards:</b> {{Awards}}<br/>
-            <b>imdbRating:</b> {{imdbRating}}<br/>
-            <b>imdbVotes:</b> {{imdbVotes}}<br/>       
-            <b>Plot:</b> {{Plot}}
-            <div style="position:absolute;bottom:20; left:20;">
-              <span class="glyphicon glyphicon-thumbs-down glyphiconThumbsRed" id="thumbDownGlyph-{{_id}}" data-id="{{_id}}"></span><span id="thumbDownNr-{{_id}}">{{thumbsDown}}</span>
-              <span class="glyphicon glyphicon-thumbs-up glyphiconThumbsBlue" id="thumbUpGlyph-{{_id}}" data-id="{{_id}}"></span><span id="thumbUpNr-{{_id}}">{{thumbsUp}}</span>
-              <script type="text/javascript">
-                $('#thumbDownGlyph-{{_id}}').click(function () {
-                  $.ajax({
-                    url: "{{URL}}/updateThumbs/{{_id}}/-1/" + window.fingerprint.md5hash,
-                    method: "PUT",
-                    data: { md5fingerprint: window.fingerprint.md5hash },
-                    contentType: "application/json",
-                    dataType: 'json'
-                  });
+    #inlineCell1 {
+      width: 400px;
+      background: -webkit-linear-gradient(left, white , black); /* For Safari 5.1 to 6.0 */
+      background: -o-linear-gradient(right, white, black); /* For Opera 11.1 to 12.0 */
+      background: -moz-linear-gradient(right, white, black); /* For Firefox 3.6 to 15 */
+      background: linear-gradient(to right, white , black); /* Standard syntax (must be last) */
+    }
+    #inlineCell3 {
+        width: 400px;
+        background: -webkit-linear-gradient(left, black , white); /* For Safari 5.1 to 6.0 */
+        background: -o-linear-gradient(right, black, white); /* For Opera 11.1 to 12.0 */
+        background: -moz-linear-gradient(right, black, white); /* For Firefox 3.6 to 15 */
+        background: linear-gradient(to right, black , white); /* Standard syntax (must be last) */
+    }
+    #inlineContainer {
+      display: table;
+      margin-left:auto;
+      margin-right:auto;
+    }
 
-                });
-                $('#thumbUpGlyph-{{_id}}').click(function () {
-                  $.ajax({
-                    url: "{{URL}}/updateThumbs/{{_id}}/1/" + window.fingerprint.md5hash,
-                    method: "PUT",
-                    data: { md5fingerprint: window.fingerprint.md5hash },
-                    contentType: "application/json",
-                    dataType: 'json'
-                  });
-                });
-              </script>
-            </div>
-          </div>
-         </td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
+    #inlineRow  {
+      display: table-row;
+    }
+
+    #inlineCell1, #inlineCell2, #inlineCell3 {
+      display: table-cell;
+    }
+  </style>
+  <div id="inlineContainer">
+    <div id="inlineRow">
+      <div id="inlineCell1">
+
+      </div> <!-- End inline cell 1 -->
+      <div id="inlineCell2">
+        <table class="table table-condensed table-bordered table-nonfluid" width="722">
+          <tbody>
+            {{#each objects}} 
+            <tr>
+              <td width="301">
+                <div class="image">
+                  <a href="http://www.imdb.com/title/{{imdbID}}" target="_blank"><img src="{{Poster}}"/></a>
+                </div>
+              </td>
+              <td style="position:relative;">
+                <span style="font-size: 20px; color: black; font-weight: bold;">{{Title}}</span><br/>        
+                <div style="margin: 4px 0 0 10px; width:420px">
+                  <b>Year:</b> {{Year}}<br/>
+                  <b>Released:</b> {{Released}}<br/>
+                  <b>Runtime:</b> {{Runtime}}<br/>
+                  <b>Genre:</b> {{Genre}}<br/>
+                  <b>Language:</b> {{Language}}<br/>
+                  <b>Awards:</b> {{Awards}}<br/>
+                  <b>imdbRating:</b> {{imdbRating}}<br/>
+                  <b>imdbVotes:</b> {{imdbVotes}}<br/>       
+                  <b>Plot:</b> {{Plot}}
+                  <div style="position:absolute;bottom:63; left:20; font-size:8pt; color:red;">
+                    {{Warning}}
+                  </div>
+                  <div style="position:absolute;bottom:20; left:20;">
+                    <span class="glyphicon glyphicon-thumbs-down glyphiconThumbsRed" id="thumbDownGlyph-{{_id}}" data-id="{{_id}}"></span><span id="thumbDownNr-{{_id}}">{{thumbsDown}}</span>
+                    <span class="glyphicon glyphicon-thumbs-up glyphiconThumbsBlue" id="thumbUpGlyph-{{_id}}" data-id="{{_id}}"></span><span id="thumbUpNr-{{_id}}">{{thumbsUp}}</span>
+                    <script type="text/javascript">
+                      $('#thumbDownGlyph-{{_id}}').click(function () {
+                        $.ajax({
+                          url: "{{URL}}/updateThumbs/{{_id}}/-1/" + window.fingerprint.md5hash,
+                          method: "PUT",
+                          data: { md5fingerprint: window.fingerprint.md5hash },
+                          contentType: "application/json",
+                          dataType: 'json'
+                        });
+
+                      });
+                      $('#thumbUpGlyph-{{_id}}').click(function () {
+                        $.ajax({
+                          url: "{{URL}}/updateThumbs/{{_id}}/1/" + window.fingerprint.md5hash,
+                          method: "PUT",
+                          data: { md5fingerprint: window.fingerprint.md5hash },
+                          contentType: "application/json",
+                          dataType: 'json'
+                        });
+                      });
+                    </script>
+                  </div>
+                </div>
+               </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div> <!-- End inline cell 2 -->
+      <div id="inlineCell3">
+      
+      </div> <!-- End inline cell 3 -->
+    </div> <!-- End inline row  -->
+  </div> <!-- End inline container -->
   </body>
 </html>

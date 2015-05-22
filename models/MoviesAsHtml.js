@@ -59,38 +59,40 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, reqRoutePath, includedependenci
 		    async.waterfall([
 			    function(waterfall_callback) {
 				    util.log("Attempting to connect to mongodb in MoviesAsHtml.getAsHTML..");
-				    mongodb.open(function(connectionResponse){
-					    util.log(".. connected!");
-					    waterfall_callback(null);
-				    });	
-			    }, 
-			    function(waterfall_callback) {
-				    async.each(movieList, 
-					    function(movie, callback){
-                            var err = undefined;
-		                    if(err) { 
-		                    	if(config.debug) console.log('.. failed!');
-		                	    util.log("Received error while connecting to mongodb:" + err);
-		                	    callback();
-		                    } else {
-		                	    if(config.debug) console.log('.. success!');
+				    mongodb.open(function(err){
+
+                    	async.each(movieList, 
+						    function(movie, callback) {
 		                	    if(config.debug) util.log('Attempting fetch movie "' + movie + '" from mongodb..');
 			                    mongodb.getMovie(movie, function(cachedMovie) {
 			                	    if(cachedMovie.Response == false)  {
 			                		    if(config.debug) util.log('Attempting fetch movie "' + movie + '" from ' +config.api +'..');
 			                		    request("http://" + config.api + "/?t=" +movie, function(error, response, body) {
 										    var movieObj = JSON.parse(body);		
-										    if(movieObj.Response) {
-											    jsonText += body;	
-                                                if(mongodb.db._state == 'connected') {				 
-							                        mongodb.saveMovie(movieObj, function(response) {
-							                	        if(response.status != 'success' && config.debug) util.log('Received error while trying to save and cache movie: "' + response.status + '"');
-							                	        else if(config.debug) util.log('Successfully saved movie to mongodb.. ');      			                    
-							                        }); 
-                                                }
-							                    if(jsonText != '') jsonText += ', ';
+										    if(movieObj.Response) {	
+										    	movieObj.thumbsUp = 0;
+		        								movieObj.thumbsDown = 0;							    
+		        								mongodb.saveMovie(movieObj, function(response) {
+							                	    if(!response.status && config.debug) util.log('Received error while trying to save and cache movie('+movieObj.Title+'): "' + response.error + '"');
+							                	    else {
+							                	    	if(config.debug) util.log('Successfully saved movie to mongodb: ' + movieObj.Title);
+							                	    	mongodb.getMovie(movie, function(cachedMovie) {
+							                	    		if(cachedMovie.Response == false)  {
+							                	    			movieObj.Warning = "This movie was not found in the database, or the database was not available. Thumbs up and down functionality will not be available."; 
+							                	    		} else {
+							                	    			movieObj = typeof cachedMovie == 'object' ? cachedMovie : JSON.parse(cachedMovie);
+							                	    		}
+							                	    		movieObj.thumbsUp = 0;
+		        											movieObj.thumbsDown = 0;
+							                	    		jsonText += JSON.stringify(movieObj);
+							                    			if(jsonText != '') jsonText += ', ';
+							                    			callback();
+        												});
+							                	    }	                    
+							                     }); 
+										    } else {
+										    	util.log('ERROR: The ' + config.api + 'replied with a response other then true. Something is wrong.');
 										    }								 	
-									 	    callback();
 									    });
 			                	    } else {
 			                		    var movieString = typeof cachedMovie == 'object' ? JSON.stringify(cachedMovie) : cachedMovie;
@@ -101,52 +103,53 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, reqRoutePath, includedependenci
 			                		    }
 			                		    callback();
 			                	    }		                           			                    
-			                    });  
-		                    }              			
-				  	    },
-				  	    function(err) {		  		
-				  		    jsonText = jsonText.length > 2 ? jsonText.substring(0, jsonText.length - 2) : jsonText;
-				  		    jsonText +=  ']';
-                            if(jsonText == "[]") {
-                                responseHandler(undefined);
-                                waterfall_callback(null);
-                            } else {
-				  		        if(config.debug) util.log('Attempting to render view for all movies fetched..');
-				  		        var handlebarsData = JSON.parse(jsonText);
-				  		       
-				  		        if(config.debug) util.log('Assuming we have fetched "' + handlebarsData.length + '" movies..');
-				  		        try {
-					  		        var source = getView(reqRoutePath);
-						            var template = Handlebars.compile(source);
+			                    });  		                                 			
+					  	    },
+					  	    function(err) {		  		
+					  		    jsonText = jsonText.length > 2 ? jsonText.substring(0, jsonText.length - 2) : jsonText;
+					  		    jsonText +=  ']';
+	                            if(jsonText == "[]") {
+	                                responseHandler(undefined);
+	                                waterfall_callback(null);
+	                            } else {
+					  		        if(config.debug) util.log('Attempting to render view for all movies fetched..');
+					  		        var handlebarsData = JSON.parse(jsonText);
+					  		       
+					  		        if(config.debug) util.log('Assuming we have fetched "' + handlebarsData.length + '" movies..');
+					  		        try {
+						  		        var source = getView(reqRoutePath);
+							            var template = Handlebars.compile(source);
 
-						            if(!handlebarsData[0].Response) handlebarsData = [{"Title": "None Found", "Year": "0000", "Poster": "http://" + config.serverHostname + ":" + config.serverPort + "/getImage/notValid.jpg", "noExists": "No movie found"}];
-						            for (var i = 0; i < handlebarsData.length; i++) {
-							            if(handlebarsData[i].Poster != undefined) {
-							    	        var filename = handlebarsData[i].Poster.split('/')[handlebarsData[i].Poster.split('/').length -1];
-							    	        var path = './coverCache/'+filename;
-							    	        if (!fs.existsSync(path)) {				    		
-								    	        var responsestream = fs.createWriteStream(path);
-								    	        request.get(handlebarsData[i].Poster).pipe(responsestream);
+							            if(!handlebarsData[0].Response) handlebarsData = [{"Title": "None Found", "Year": "0000", "Poster": "http://" + config.serverHostname + ":" + config.serverPort + "/getImage/notValid.jpg", "noExists": "No movie found"}];
+							            for (var i = 0; i < handlebarsData.length; i++) {
+								            if(handlebarsData[i].Poster != undefined) {
+								    	        var filename = handlebarsData[i].Poster.split('/')[handlebarsData[i].Poster.split('/').length -1];
+								    	        var path = './coverCache/'+filename;
+								    	        if (!fs.existsSync(path)) {				    		
+									    	        var responsestream = fs.createWriteStream(path);
+									    	        request.get(handlebarsData[i].Poster).pipe(responsestream);
+									            }
+									            handlebarsData[i].Poster = "http://" + config.serverHostname + ":" + config.serverPort + "/getImage/" + filename;
+									            handlebarsData[i].URL = "http://" + config.serverHostname + ":" + config.serverPort;
 								            }
-								            handlebarsData[i].Poster = "http://" + config.serverHostname + ":" + config.serverPort + "/getImage/" + filename;
-								            handlebarsData[i].URL = "http://" + config.serverHostname + ":" + config.serverPort;
-							            }
-							        }
-						            var wrapper = {objects: handlebarsData};
-						            var htmlReturn = template(wrapper);	    
-							        responseHandler(htmlReturn);
-				  		        } catch (err) {
-				  			        if(config.debug) util.log('Failed to load template view ' + source +', ' + err);
-				  			        responseHandler(err);				  			
-				  		        }		    
-				  		        waterfall_callback(null);	
-                            }
-				  	    }
-				    );
-		    }], function(err) {
+								        }
+							            var wrapper = {objects: handlebarsData};
+							            var htmlReturn = template(wrapper);	    
+								        responseHandler(htmlReturn);
+					  		        } catch (err) {
+					  			        if(config.debug) util.log('Failed to load template view ' + source +', ' + err);
+					  			        responseHandler(err);				  			
+					  		        }		    
+					  		        waterfall_callback(null);	
+	                            }
+					  	    }
+					    );					    
+				    });	
+			    }
+			], function(err) {
+		    	mongodb.close();
 			    if(err && config.debug) util.log("Received error after async waterfall in MoviesAsHtml.getAsHTML(): " + err);
-			    if(err) return err;
-			    mongodb.close();
+			    if(err) return err;			    
 		    });
         }
 	});	

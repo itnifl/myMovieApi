@@ -13,7 +13,7 @@ function MoviesAsHtmlController() {
 	 ['get', '/moviesAsHTML', this.get, 'Displays all movies in sourceDir as HTML carousel but does not includes jQuery and Bootstrap'],
 	 ['get', '/moviesAsHTML/:includedependencies', this.get, 'Displays all movies in sourceDir as HTML carousel and includes jQuery and Bootstrap if includedependencies is set to true.'],
     ['get', '/moviesAsHTML/large/:includedependencies', this.get, 'Displays all movies in sourceDir as HTML carousel with jsShowOff and includes dependencies(jQuery and jsShowOff) if includedependencies is set to true.'],
-    ['get', '/moviesAsHTMLList', this.get, 'Displays all movies in sourceDir as HTML list with including jQuery and Bootstrap']
+    ['get', '/moviesAsHTMLList', this.get, 'Displays all movies in sourceDir as a HTML tabled list and includes jQuery and Bootstrap']
   ];
 }
 util.inherits(MoviesAsHtmlController, BaseController);

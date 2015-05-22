@@ -41,7 +41,7 @@ module.exports = {
                     mongodb.getMovie('Skyline', function(movie) {
                         //console.log('**Got getResponse: '.yellow + secondResponse);
                         getResponse = movie;
-                        mongodb.updateMovieThumbs(movie._id, 1, function(thirdResponse) {
+                        mongodb.addMovieThumb(movie._id, 1, function(thirdResponse) {
                             //console.log('**Got getResponse: '.yellow + thirdResponse);
                             updateLikeResponse = thirdResponse;
                             mongodb.close();

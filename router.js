@@ -61,7 +61,7 @@ Router.prototype.Start = function(port) {
   io = require('socket.io').listen(this.app.listen(port));
   io.sockets.on('connection', function (socket) {
     var clientIp = socket.request.connection.remoteAddress;
-    util.log("A client has connected via socket.io from: " + clientIp);
+    util.log("A client has connected via socket.io from ip: " + clientIp);
     /*var mongodb = new MongoDB(config.mongoServer, config.mongoPort);
 
     mongodb.open(function(connectionResponse) {
