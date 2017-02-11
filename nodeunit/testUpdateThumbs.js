@@ -1,6 +1,5 @@
 var config = require('../config');
 var colors = require('colors');
-var root = require('../server.js');
 var routeResponse = '';
 
 module.exports = {  
@@ -8,8 +7,9 @@ module.exports = {
         try {
             console.log('**Running Test Setup'.yellow);
             require('../modelLoader');
-            var root = Model.get('Root').find(1);
-            root.getApi(function(response) {                                            
+            var UpdateThumbs = Model.get('UpdateThumbs').find(1);
+            UpdateThumbs.update(1, "53c2855c0ae7ecfe2aefc516", function(response) {    
+                if(config.debug) console.log("**Got response: ".yellow + typeof cachedMovie == 'object' ? JSON.stringify(response) : response);                                        
                 routeResponse = response;                            
                 callback();                   
             }); 
@@ -26,11 +26,9 @@ module.exports = {
     testRoot: function(test) {   
         test.expect(2);           
         console.log('**Running tests: '.yellow + '(2)');
-        if(config.debug) console.log("**Got response with length: ".yellow + routeResponse.length);
-        test.ok(routeResponse.length > 0, "Failed testing that we did not receive an empty result..");
-        var testForHtmlResult = /<[a-z][\s\S]*>/i;
-        test.ok(testForHtmlResult.test(routeResponse), "Failed testing if we received html (dependencyless view)..");     
-        test.done();
-        root.ioServerClose();                           
+        if(config.debug) console.log("**Got response of type: ".yellow + typeof routeResponse);
+        test.ok(typeof routeResponse == 'object' , "Failed testing that we received a object as a response");
+        test.ok(routeResponse.status, "Failed testing if status of the object was true, something wrong happened");     
+        test.done();                         
     }
 }; 

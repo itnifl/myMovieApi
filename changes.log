@@ -1,0 +1,57 @@
+***Changes before 20.07.2014:
+- Improved logging.
+- Improved Readme.md.
+- Wrote nodeunit tests for all models up until now.
+- Improved MovieAsHtml model and controller.
+- Added view MoviesAsHtmlWithDependencies.template and code for handeling it.
+- Added Code to display all api routes and usages when entering root /.
+- Added code to handle saving and fetching from mongodb, and embedded that into previous code for usage.
+
+***Changes on 20.07.2014:
+- Added error handeling if perl is not installed.
+- Added error handeling if movieDir is empty.
+- Improved minor syntax mistakes for code to work on bot Linux and Windows.
+- Fixed error where api does not reply if database is not available.
+
+***Changes on 23.07.2014:
+- Created a default html response if no movies are found.
+- Added new route /moviesAsHTML/large/:includedependencies
+- nodeunit tested the new route and verified previous tests
+
+***Changes on 24.07.2014:
+- Updated the view templates that include dependencies to have full HTML markup.
+- Updated Readme.md
+
+***Changes on 18.05.2015:
+- Added filtering capabillity when listing movies as JSON, thus creating a new possible route.
+- Merged the MoviesAsHtml model with the MoviesAsHtmlLarge model.
+- Added more information to verbose logging.
+- Updated Readme.md
+
+***Changes on 19.05.2015:
+- Source IP address is now included in the verbosedebug log and regular log.
+- Route listing now links to the routes it displays.
+- Let GetImage model return a default image if the requested one is not found.
+- Created a new view that is handeled by the corresponding controllers.
+
+***Changes on 20.05.2015:
+- Created a working controller and model that receives thumbs up and down and stores them on the movie object in MongoDb.
+- Update MoviesAsHtmlListWithDependencies.template so that it may post thumbs to this controller
+
+***Changes on 21.05.2015:
+- Amount of thumbs up or down is now shown in the html list view using handlebars and updated with socket.io on all clients
+- Made sure thumbs can only be changed up or down once per session, where a session is identified as a presence of a md5 hash identifying the browser.
+- All tests have been run and verified, new tests made for new code.
+
+***Changes on 22.05.2015:
+- Added pace.js to the MoviesAsHtmlListWithDependencies view.
+- Made sure a thumb up is removed if thumb down is pressed, if thumb up was already pressed by the same user already.
+- Styled the new MoviesAsHtmlListWithDependencies view better.
+- Fixed thumb control not working when first time retrieve of movie to dabase occurs.
+- Added error message regarding thumb functionality if database is not available or movie cannot be fetched from the database.
+
+***To be done:
+- Add a control bar at the top of MoviesAsHtmlListWithDependencies that lets you choose sorting options
+- Create a download link
+- Create a pirate bay link
+- Figure out why Bridge to Terabithia is never found by Title in the database, even when it is there.

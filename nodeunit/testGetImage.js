@@ -1,5 +1,4 @@
 var config = require('../config');
-var util = require('util');
 var colors = require('colors');
 var imageResponse = '';
 
@@ -22,7 +21,7 @@ module.exports = {
         console.log('**Running Test Teardown'.yellow);
         callback();
     },
-    getMoviesAsHtml: function(test) {   
+    getImage: function(test) {   
             test.expect(1);           
             console.log('**Running tests: '.yellow + '(1)');
             if(config.debug && imageResponse != '') console.log("**Got response with length: ".yellow + imageResponse.length);

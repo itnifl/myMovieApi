@@ -87,9 +87,9 @@ MoviesAsList.prototype.getAsList = function(dir, movieFilterName, responseHandle
 				  	    }
 				    );
 			    }], function(err) {
+			    	mongodb.close();
 				    if(err && config.debug) util.log("Received error after async waterfall in MoviesAsHtml.getAsHTML(): " + err);
 				    if(err) return err;
-				    mongodb.close();
 			    }
 		    );	
         }
