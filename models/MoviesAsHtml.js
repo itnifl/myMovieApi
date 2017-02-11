@@ -80,33 +80,30 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, reqRoutePath, includedependenci
 												var movieObj = typeof body == 'object' ? body : JSON.parse(body);	
 												if(config.verbosedebug) {	
 													util.log('Verbosedebug - Got a reply with status code 200');
-												}													
-												if(movieObj.hasOwnProperty("Response") || movieObj.Response == '200') {	
-													movieObj.thumbsUp = 0;
-													movieObj.thumbsDown = 0;							    
-													mongodb.saveMovie(movieObj, function(response) {
-														if(!response.status && config.debug) util.log('Received error while trying to save and cache movie('+movieObj.Title+'): "' + response.error + '"');
-														else {
-															if(config.debug) util.log('Successfully saved movie to mongodb: ' + movieObj.Title);
-															mongodb.getMovie(movie, function(cachedMovie) {
-																if(cachedMovie.Response == false)  {
-																	movieObj.Warning = "This movie was not found in the database, or the database was not available. Thumbs up and down functionality will not be available."; 
-																} else {
-																	movieObj = typeof cachedMovie == 'object' ? cachedMovie : JSON.parse(cachedMovie);
-																}
-																movieObj.thumbsUp = 0;
-																movieObj.thumbsDown = 0;
-																jsonText += JSON.stringify(movieObj);
-																if(jsonText != '') jsonText += ', ';
-																callback();
-															});
-														}	                    
-													 }); 
-												} else {
-													util.log('ERROR: The ' + config.api + ' replied with a response other then true. Something is wrong.');
-												}												
+												}														
+												movieObj.thumbsUp = 0;
+												movieObj.thumbsDown = 0;							    
+												mongodb.saveMovie(movieObj, function(response) {
+													if(!response.status && config.debug) util.log('Received error while trying to save and cache movie('+movieObj.Title+'): "' + response.error + '"');
+													else {
+														if(config.debug) util.log('Successfully saved movie to mongodb: ' + movieObj.Title);
+														mongodb.getMovie(movie, function(cachedMovie) {
+															if(cachedMovie.Response == false)  {
+																movieObj.Warning = "This movie was not found in the database, or the database was not available. Thumbs up and down functionality will not be available."; 
+															} else {
+																movieObj = typeof cachedMovie == 'object' ? cachedMovie : JSON.parse(cachedMovie);
+															}
+															movieObj.thumbsUp = 0;
+															movieObj.thumbsDown = 0;
+															jsonText += JSON.stringify(movieObj);
+															if(jsonText != '') jsonText += ', ';
+															callback();
+														});
+													}	                    
+												 }); 											
 											} else {
-												if(config.debug) util.log('Got status code "' + response.statusCode + '" aborting further handeling of this movie!');												
+												if(config.debug) util.log('Got status code "' + response.statusCode + '" aborting further handeling of this movie!');
+												util.log('ERROR: The ' + config.api + ' replied with a response other then true. Something is wrong.');												
 											}																		 
 									    });
 			                	    } else {
