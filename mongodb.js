@@ -87,7 +87,6 @@ MongoDB.prototype.getMovie = function(title, responseHandler) {
             if (movie) { 
                 if (config.verbosedebug) util.log("Found movie in mongodb: " + JSON.stringify(movie, undefined, 2));     
                 if (config.debug && !config.verbosedebug) util.log("Found movie in mongodb: '" + movie.Title + "'..");
-
                 
                 var thumbsUp = typeof movie.thumbsUp === undefined || isNaN(movie.thumbsUp) ? 0 : movie.thumbsUp;
                 var thumbsDown = typeof movie.thumbsDown === undefined || isNaN(movie.thumbsDown) ? 0 : movie.thumbsDown;
@@ -95,7 +94,7 @@ MongoDB.prototype.getMovie = function(title, responseHandler) {
                 if(thumbsUp == 0) movie.thumbsUp = thumbsUp;
                 if(thumbsDown == 0) movie.thumbsDown = thumbsDown;
 				movie.Response = true;
-				
+
                 responseHandler(movie);
             } else {
                 if (config.debug) util.log("Found nothing by the title: '" + title + "'..");
