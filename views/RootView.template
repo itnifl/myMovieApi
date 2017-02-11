@@ -28,7 +28,7 @@
 				<div class="row-fluid" style="margin-bottom:5px;">
 				    <div class="span5 spanRowShapeColored">
 				        <span>
-				            <table class="table"><tr><td style="width:150px;"><b>Verb:</b> {{verb}}</td><td style="width:365px;"><b>Route:</b> {{route}}</td><td><b>Description:</b> {{description}}</td></tr></table>
+				            <table class="table"><tr><td style="width:150px;"><b>Verb:</b> {{verb}}</td><td style="width:365px;"><b>Route:</b> <a href="{{routeLink}}" target="_blank">{{route}}</a></td><td><b>Description:</b> {{description}}</td></tr></table>
 				        </span>
 				    </div>
 				</div>

@@ -27,7 +27,7 @@ RootController.prototype.get = function(req, res) {
   Root.getApi(function(routeHtmlResponse) {
       res.send(routeHtmlResponse);
   });
-  util.log("Sending api definitions by request ..");
+  util.log("Sending api definitions by request from ip " + req.connection.remoteAddress);
 };
 
 module.exports = new RootController();

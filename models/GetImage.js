@@ -22,8 +22,9 @@ _.extend(GetImage, BaseModel);
  */
 GetImage.prototype.getImage = function(imageFile, responseHandler) {
 	var fs = require("fs");
-	var img = fs.readFileSync('./coverCache/' + imageFile);
-	if(config.debug) util.log('Returning "' + imageFile + '" to responseHandler that will return it to client..');
+	var path = './coverCache/' + imageFile;
+	var img = fs.existsSync(path) ? fs.readFileSync(path) : fs.readFileSync('./coverCache/notValid.jpg') ;
+	if(config.debug) util.log('Returning "' + imageFile + '" to responseHandler that will return it to the client..');
 	responseHandler(img);
 };
 
