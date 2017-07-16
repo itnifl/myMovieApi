@@ -22,7 +22,14 @@ BaseModel.getList = function(dir, callbackHandler) {
 				if(config.debug) util.log("Pushing result to return list: '" + stdout + "' after reading '" + folder + "' at BaseModel.getList()");			
 				if(stdout) movieNames.push(stdout);
                 else util.log("nameProcessor.pl returned an empty string at BaseModel.getList(), is Perl installed on your system?");
-				callback();
+
+                if (stderr) {
+                    util.log(stderr);
+                }
+			    if (err) {
+			        util.log(err);
+			    }
+			    callback();
 			});	
 	  	},
 	  	function(err){

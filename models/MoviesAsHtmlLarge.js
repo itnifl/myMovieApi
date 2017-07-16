@@ -46,8 +46,12 @@ MoviesAsHtmlLarge.prototype.getAsHtml = function(dir, includedependencies, respo
 		    async.waterfall([
 			    function(waterfall_callback) {
 				    util.log("Attempting to connect to mongodb in MoviesAsHtmlLarge.getAsHTML..");
-				    mongodb.open(function(connectionResponse){
-					    util.log(".. connected!");
+                    mongodb.open(function (connectionResponse) {
+                        if (connectionResponse) {
+                            util.log("Something went wrong at mongodb.open: " + connectionResponse);
+                        } else {
+                            util.log(".. connected!");
+                        }					    
 					    waterfall_callback(null);
 				    });	
 			    }, 

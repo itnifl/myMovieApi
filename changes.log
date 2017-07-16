@@ -50,6 +50,10 @@
 - Fixed thumb control not working when first time retrieve of movie to dabase occurs.
 - Added error message regarding thumb functionality if database is not available or movie cannot be fetched from the database.
 
+***Changes on 16.07.2017:
+- Updated Readme regarding omdbapi.com and the new api key requirements
+- Improved error handeling and logging of errors in the code.
+
 ***To be done:
 - Add a control bar at the top of MoviesAsHtmlListWithDependencies that lets you choose sorting options
 - Create a download link

@@ -60,8 +60,10 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, reqRoutePath, includedependenci
 			    function(waterfall_callback) {
 				    util.log("Attempting to connect to mongodb in MoviesAsHtml.getAsHTML..");
 				    mongodb.open(function(err){
-
-                    	async.each(movieList, 
+                        if (err) {
+                            util.log("Something went wrong at mongodb.open: " + err);
+				        }
+				        async.each(movieList, 
 						    function(movie, callback) {
 		                	    if(config.debug) util.log('Attempting fetch movie "' + movie + '" from mongodb..');
 			                    mongodb.getMovie(movie, function(cachedMovie) {
@@ -71,8 +73,8 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, reqRoutePath, includedependenci
 			                		    request(urlDestination, function(error, response, body) {
 											var stringResponse = typeof response == 'object' ? JSON.stringify(response, undefined, 2) : response;
 										    if(config.debug) util.log('Attempting fetch movie "' + movie + '" from api via url: ' + urlDestination);	
-											if(config.verbosedebug) {																						
-												util.log('Verbosedebug - Got the reply; Error: ' + error + ". Response: " + stringResponse )
+											if(config.verbosedebug) {
+											    util.log('Verbosedebug - Got the reply; Error: ' + error + ". Response: " + stringResponse);
 												var stringBody = typeof body == 'object' ? JSON.stringify(body, undefined, 2) : body;
 												util.log("Body: " + stringBody);
 											}	
@@ -102,8 +104,8 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, reqRoutePath, includedependenci
 													}	                    
 												 }); 											
 											} else {
-												if(config.debug) util.log('Got status code "' + response.statusCode + '" aborting further handeling of this movie!');
-												util.log('ERROR: The ' + config.api + ' replied with a response other then true. Something is wrong.');												
+												if(config.debug) util.log('Got status code "' + response.statusCode + '" aborting further handeling of this movie! Looks like the movie info cannot be fetched from either the database or the API.');
+												util.log('ERROR: The ' + config.api + ' replied with a response other then true. Something is wrong. Are all prerequisites met to be able to communicate with the API?');												
 											}																		 
 									    });
 			                	    } else {

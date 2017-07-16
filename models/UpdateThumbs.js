@@ -29,7 +29,10 @@ UpdateThumbs.prototype.update = function(thumbInteger, _id, responseHandler) {
 	async.waterfall([
 	    function(waterfall_callback) {
 		    util.log("Attempting to connect to mongodb in UpdateThumbs.update() ..");
-		    mongodb.open(function(connectionResponse) {
+            mongodb.open(function (connectionResponse) {
+                if (connectionResponse) {
+                    util.log("Something went wrong at mongodb.open: " + connectionResponse);
+                }
 		    	mongodb.addMovieThumb(_id, thumbInteger, function(thumbUpdateResponse) {
 		    		if(config.verbosedebug) util.log('Received info about thumbs to put in MongoDb: ' + JSON.stringify(thumbUpdateResponse));
 	        	    if(thumbUpdateResponse.Response == false)  {
@@ -63,7 +66,10 @@ UpdateThumbs.prototype.remove = function(thumbInteger, _id, responseHandler) {
 	async.waterfall([
 	    function(waterfall_callback) {
 		    util.log("Attempting to connect to mongodb in UpdateThumbs.remove() ..");
-		    mongodb.open(function(connectionResponse) {
+            mongodb.open(function (connectionResponse) {
+                if (connectionResponse) {
+                    util.log("Something went wrong at mongodb.open: " + connectionResponse);
+                } 
 		    	mongodb.removeMovieThumb(_id, thumbInteger, function(thumbUpdateResponse) {
 		    		if(config.verbosedebug) util.log('Received info about thumb to be removed in MongoDb: ' + JSON.stringify(thumbUpdateResponse));
 	        	    if(thumbUpdateResponse.Response == false)  {

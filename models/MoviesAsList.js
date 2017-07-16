@@ -38,7 +38,11 @@ MoviesAsList.prototype.getAsList = function(dir, movieFilterName, responseHandle
 			    function(waterfall_callback) {
 				    util.log("Attempting to connect to mongodb in MoviesAsHtml.getAsHTML..");
 				    mongodb.open(function(connectionResponse) {
-					    util.log(".. connected!");
+				        if (connectionResponse) {
+				            util.log("Something went wrong at mongodb.open: " + connectionResponse);
+				        } else {
+				            util.log(".. connected!");
+				        }
 					    waterfall_callback(null);
 				    });	
 			    }, 

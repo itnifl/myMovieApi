@@ -33,6 +33,7 @@ My Movie API installation and operation requires that the following software is 
 	4. mongodb if you want this system to cache results from api(recommended).
 	5. jQuery and Bootstrap may need to be included depending on the API route you choose.
 	6. jQuery and jShowOff may need to be included depending on the API route you choose.
+	7. An API key from omdbapi.com to user their API. The code is not updated to use this key. Another option is to use a different API and test the code against that API instead.
 
 Installing Prerequisites
 ------------------------
