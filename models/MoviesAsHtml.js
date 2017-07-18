@@ -104,8 +104,9 @@ MoviesAsHtml.prototype.getAsHTML = function(dir, reqRoutePath, includedependenci
 													}	                    
 												 }); 											
 											} else {
-												if(config.debug) util.log('Got status code "' + response.statusCode + '" aborting further handeling of this movie! Looks like the movie info cannot be fetched from either the database or the API.');
-												util.log('ERROR: The ' + config.api + ' replied with a response other then true. Something is wrong. Are all prerequisites met to be able to communicate with the API?');												
+                                                if (config.debug) util.log('Got status code "' + response.statusCode + '" aborting further handeling of this movie ("' + movie + '")! Looks like the movie info cannot be fetched from either the database or the API.');
+                                                util.log('ERROR: The ' + config.api + ' replied with a response other then true. Something is wrong. Are all prerequisites met to be able to communicate with the API?');												
+											    callback();
 											}																		 
 									    });
 			                	    } else {
